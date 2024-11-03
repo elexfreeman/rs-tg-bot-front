@@ -1,36 +1,59 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback } from 'react';
 import {
   SplitLayout,
   SplitCol,
   View,
   Epic,
   useAdaptivityWithJSMediaQueries,
-} from '@vkontakte/vkui'
+} from '@vkontakte/vkui';
 import {
   useActiveVkuiLocation,
   usePopout,
   useRouteNavigator,
-} from '@vkontakte/vk-mini-apps-router'
-import { Modals } from './modals'
-import { ShopPanel, ShopView } from './routes'
-import { CustomTabbar } from './components'
-import { Dashboard } from './pages/Dashboard/Dashboard'
+} from '@vkontakte/vk-mini-apps-router';
+import { Modals } from './modals';
+import { AppRoutes, ShopView } from './routes';
+import { CustomTabbar } from './components';
+
+import { Dashboard } from './pages/Dashboard/Dashboard';
+import { ProjectAdd } from './pages/Project/ProjectAdd';
+
+import {  ProjectCtrl } from './pages/Project/project_ctrl';
+// import { DashboardCtrl } from './pages/Dashboard/dashboard_ctrl';
+import { useProjectStore, setProjectStore } from './store/project.store';
+import {DashboardCtrl} from './pages/Dashboard/dashboard_ctrl';
 
 export const App: FC = () => {
-  const routerPopout = usePopout()
+  const routerPopout = usePopout();
+    const projectStore = useProjectStore();
   /** Возвращает объект с помощью которого можно совершать переходы в навигации */
-  const routeNavigator = useRouteNavigator()
+  const routeNavigator = useRouteNavigator();
+
+  const dashboardCtrl: DashboardCtrl = new DashboardCtrl(
+    routeNavigator,
+    projectStore,
+    setProjectStore
+  );
+
+  const projectCtrl: ProjectCtrl = new ProjectCtrl(
+    routeNavigator,
+    projectStore,
+    setProjectStore
+  );
 
   /** Получаем текущую позицию */
   const {
     panelsHistory,
-    view: activeView = ShopPanel.Store,
+    view: activeView = AppRoutes.Store,
     panel: activePanel = ShopView.Main,
-  } = useActiveVkuiLocation()
+  } = useActiveVkuiLocation();
 
   /** Получаем тип устройства */
-  const { isDesktop } = useAdaptivityWithJSMediaQueries()
-  const onSwipeBack = useCallback(() => routeNavigator.back(), [routeNavigator])
+  const { isDesktop } = useAdaptivityWithJSMediaQueries();
+  const onSwipeBack = useCallback(
+    () => routeNavigator.back(),
+    [routeNavigator]
+  );
 
   /**
    * SplitLayout - Компонент-контейнер для реализации интерфейса с многоколоночной структурой [https://vkcom.github.io/VKUI/#/SplitLayout]
@@ -56,10 +79,11 @@ export const App: FC = () => {
             nav={ShopView.Main}
             activePanel={activePanel}
           >
-            <Dashboard nav={ShopPanel.Dashboard} />
+            <Dashboard nav={AppRoutes.Dashboard} ctrl={dashboardCtrl}/>
+            <ProjectAdd nav={AppRoutes.ProjectAdd}  ctrl={projectCtrl} />
           </View>
         </Epic>
       </SplitCol>
     </SplitLayout>
-  )
-}
+  );
+};

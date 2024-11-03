@@ -14,19 +14,21 @@ export enum ShopView {
   Main = 'main',
 }
 
-export enum ShopPanel {
+export enum AppRoutes {
   ProductInfo = 'productInfo',
   ShoppingCart = 'shoppingCart',
   Store = 'store',
   Dashboard = '/',
+  ProjectAdd = 'ProjectAdd',
+  ProjectInfo = 'ProductInfo',
 }
 
 /** Настройка типизированной конфигурации маршрутов */
 export const routes = RoutesConfig.create([
   createRoot(SHOP_ROOT, [
     createView(ShopView.Main, [
-      createPanel(ShopPanel.Dashboard, '/', []),
-//      createPanel(ShopPanel.Store, `/${ShopPanel.Store}`, []),
+      createPanel(AppRoutes.Dashboard, '/', []),
+      createPanel(AppRoutes.ProjectAdd, `/${AppRoutes.ProjectAdd}`, []),
 //      createPanel(ShopPanel.ProductInfo, `/${ShopPanel.ProductInfo}`, []),
 //      createPanel(ShopPanel.ShoppingCart, `/${ShopPanel.ShoppingCart}`, []),
     ]),
