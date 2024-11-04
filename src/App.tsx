@@ -18,28 +18,19 @@ import { CustomTabbar } from './components';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { ProjectAdd } from './pages/Project/ProjectAdd';
 
-import {  ProjectCtrl } from './pages/Project/project_ctrl';
+import { ProjectCtrl } from './pages/Project/project_ctrl';
 // import { DashboardCtrl } from './pages/Dashboard/dashboard_ctrl';
 import { useProjectStore, setProjectStore } from './store/project.store';
-import {DashboardCtrl} from './pages/Dashboard/dashboard_ctrl';
+import { DashboardCtrl } from './pages/Dashboard/dashboard_ctrl';
 
 export const App: FC = () => {
   const routerPopout = usePopout();
-    const projectStore = useProjectStore();
+  const projectStore = useProjectStore();
   /** Возвращает объект с помощью которого можно совершать переходы в навигации */
   const routeNavigator = useRouteNavigator();
 
-  const dashboardCtrl: DashboardCtrl = new DashboardCtrl(
-    routeNavigator,
-    projectStore,
-    setProjectStore
-  );
-
-  const projectCtrl: ProjectCtrl = new ProjectCtrl(
-    routeNavigator,
-    projectStore,
-    setProjectStore
-  );
+  DashboardCtrl.init(routeNavigator, projectStore, setProjectStore);
+  ProjectCtrl.init(routeNavigator, projectStore, setProjectStore);
 
   /** Получаем текущую позицию */
   const {
@@ -79,8 +70,8 @@ export const App: FC = () => {
             nav={ShopView.Main}
             activePanel={activePanel}
           >
-            <Dashboard nav={AppRoutes.Dashboard} ctrl={dashboardCtrl}/>
-            <ProjectAdd nav={AppRoutes.ProjectAdd}  ctrl={projectCtrl} />
+            <Dashboard nav={AppRoutes.Dashboard} />
+            <ProjectAdd nav={AppRoutes.ProjectAdd} />
           </View>
         </Epic>
       </SplitCol>

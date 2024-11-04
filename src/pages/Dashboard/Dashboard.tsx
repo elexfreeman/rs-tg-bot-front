@@ -1,21 +1,24 @@
-import { FC, memo, useEffect } from 'react'
+import { FC, memo, useEffect } from 'react';
 import {
+  NavIdProps,
   Panel,
   PanelHeader,
   Group,
   CardGrid,
   ContentCard,
   CellButton,
-} from '@vkontakte/vkui'
-import { Icon28AddOutline } from '@vkontakte/icons'
-import { DashboardCtrl } from './dashboard_ctrl'
-import { PageProps } from 'src/system/PageProps';
+} from '@vkontakte/vkui';
+import { Icon28AddOutline } from '@vkontakte/icons';
+import { DashboardCtrl } from './dashboard_ctrl';
+import { useProjectStore } from 'src/store/project.store';
 
-export const Dashboard: FC<PageProps<DashboardCtrl>> = memo((props: PageProps<DashboardCtrl>) => {
+export const Dashboard: FC<NavIdProps> = memo((props: NavIdProps) => {
+  const dashboardCtrl = DashboardCtrl.getInstance();
+  const projectStore = useProjectStore();
 
   useEffect(() => {
-    props.ctrl.projectList();
-  }, [])
+    dashboardCtrl.projectList();
+  }, []);
 
   return (
     <Panel className="Panel__fullScreen" {...props}>
@@ -23,12 +26,12 @@ export const Dashboard: FC<PageProps<DashboardCtrl>> = memo((props: PageProps<Da
       <Group>
         <CardGrid size="l">
           <CellButton
-            onClick={() => props.ctrl.goToNewProject()}
+            onClick={() => dashboardCtrl.goToNewProject()}
             before={<Icon28AddOutline />}
           >
             Добавить проект
           </CellButton>
-          {props.ctrl.projectStore.list?.data?.map((item) => (
+          {projectStore.list?.data?.map((item) => (
             <ContentCard
               key={item.id}
               subtitle=""
@@ -39,7 +42,7 @@ export const Dashboard: FC<PageProps<DashboardCtrl>> = memo((props: PageProps<Da
         </CardGrid>
       </Group>
     </Panel>
-  )
-})
+  );
+});
 
-Dashboard.displayName = 'Store'
+Dashboard.displayName = 'Store';

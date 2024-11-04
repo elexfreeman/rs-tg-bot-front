@@ -3,27 +3,54 @@ import { ProjectStoreI } from '../../store/project.store';
 import { getProjectList } from 'src/api/project_api';
 
 export class DashboardCtrl {
-  projectStore: ProjectStoreI;
+  projectStore: ProjectStoreI
   setProjectStore: (payload: ProjectStoreI) => void;
   routeNavigator: RouteNavigator;
+  private isInit = false;
 
-  constructor(
+  private constructor() {
+    this.projectStore = { };
+    // eslint-disable-next-line
+    this.setProjectStore = (payload:ProjectStoreI) => {};
+    let a:any = 0;
+    this.routeNavigator = a;
+  }
+
+  private static instance: DashboardCtrl;
+
+  public static init(
     routeNavigator: RouteNavigator,
     store: ProjectStoreI,
     setProjectStore: (payload: ProjectStoreI) => void
   ) {
-    this.projectStore = store;
-    this.routeNavigator = routeNavigator;
-    this.setProjectStore = setProjectStore;
+    const ctrl = DashboardCtrl.getInstance();
+    ctrl.projectStore = store;
+    ctrl.routeNavigator = routeNavigator;
+    ctrl.setProjectStore = setProjectStore;
+    ctrl.isInit = true;
+  }
+
+
+  public static getInstance(): DashboardCtrl {
+    if (!DashboardCtrl.instance) {
+      DashboardCtrl.instance = new DashboardCtrl();
+    }
+    return DashboardCtrl.instance;
   }
 
   async projectList() {
-    this.projectStore.list = await getProjectList();
-    this.setProjectStore({ ...this.projectStore });
-    return this.projectStore;
+    if (!this.isInit) {
+      return;
+    }
+      this.projectStore.list = await getProjectList();
+      this.setProjectStore({ ...this.projectStore });
+      return this.projectStore;
   }
 
   goToNewProject() {
+    if (!this.isInit) {
+      return;
+    }
     this.routeNavigator.push(`ProjectAdd`);
   }
 }
