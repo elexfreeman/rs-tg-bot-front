@@ -5,17 +5,21 @@ import { ResultI } from 'src/system/error_sys';
 
 export interface ProjectStoreI {
   isLoad?: boolean;
-  list?: ResultI<Partial<ProjectI>[]>;
-  add?: ResultI<{id: number}>;
+  list: ResultI<Partial<ProjectI>[]>;
+  add: ResultI<{id: number}>;
+  update: ResultI<{id: number}>;
+  info: ResultI<Partial<ProjectI>>;
 }
 
 export const state: ProjectStoreI = {
   isLoad: true,
   list: {},
   add: {},
+  update: {},
+  info: {},
 };
 
-export const defaultState = state;
+export const defaultState = {...state};
 
 const [change, setProjectStore] = createSignal<ProjectStoreI>();
 const [useProjectStore] = bind(change, defaultState);

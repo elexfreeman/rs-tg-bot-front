@@ -7,29 +7,36 @@ import {
   Button,
 } from '@vkontakte/vkui';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import {  ProjectCtrl } from './project_ctrl';
+import { ProjectCtrl } from './project_ctrl';
 import { ProjectI } from 'src/api/project_api';
 
 interface ProjectAddEditFormPops {
-  project: ProjectI;
+  project?: Partial<ProjectI>;
+  isUpdate?: boolean;
 }
 
 export const ProjectAddEditForm: FC<ProjectAddEditFormPops> = memo(
   (props: ProjectAddEditFormPops) => {
+    const projectCtrl = ProjectCtrl.getInstance();
+
     const {
       register,
       handleSubmit,
       control,
       formState: { errors },
     } = useForm({
-      defaultValues: { ...props.project },
-    });
+      defaultValues: props.project,
+      values: props.project,
+    },);
 
-
-    const projectCtrl = ProjectCtrl.getInstance();
-
-    const onSubmit: SubmitHandler<ProjectI> = (data: ProjectI) => {
-      projectCtrl.addProject(data);
+    const onSubmit: SubmitHandler<Partial<ProjectI>> = (
+      data: Partial<ProjectI>
+    ) => {
+      if (props.isUpdate) {
+        projectCtrl.updateProject(data);
+      } else {
+        projectCtrl.addProject(data);
+      }
     };
 
     useEffect(() => {

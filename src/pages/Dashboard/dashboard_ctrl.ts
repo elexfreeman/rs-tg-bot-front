@@ -1,5 +1,8 @@
 import { RouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { ProjectStoreI } from '../../store/project.store';
+import {
+  ProjectStoreI,
+  defaultState as projectStoreDefaultState,
+} from '../../store/project.store';
 import { getProjectList } from 'src/api/project_api';
 
 export class DashboardCtrl {
@@ -9,7 +12,7 @@ export class DashboardCtrl {
   private isInit = false;
 
   private constructor() {
-    this.projectStore = { };
+    this.projectStore = {...projectStoreDefaultState};
     // eslint-disable-next-line
     this.setProjectStore = (payload:ProjectStoreI) => {};
     let a:any = 0;
@@ -47,10 +50,17 @@ export class DashboardCtrl {
       return this.projectStore;
   }
 
-  goToNewProject() {
+  goToAddProject() {
     if (!this.isInit) {
       return;
     }
     this.routeNavigator.push(`ProjectAdd`);
+  }
+
+  goToUpdateProject(projectId?: number) {
+    if (!this.isInit) {
+      return;
+    }
+    this.routeNavigator.push(`ProjectUpdate/${projectId}`);
   }
 }

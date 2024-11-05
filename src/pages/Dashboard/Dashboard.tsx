@@ -26,7 +26,7 @@ export const Dashboard: FC<NavIdProps> = memo((props: NavIdProps) => {
       <Group>
         <CardGrid size="l">
           <CellButton
-            onClick={() => dashboardCtrl.goToNewProject()}
+            onClick={() => dashboardCtrl.goToAddProject()}
             before={<Icon28AddOutline />}
           >
             Добавить проект
@@ -34,6 +34,7 @@ export const Dashboard: FC<NavIdProps> = memo((props: NavIdProps) => {
           {projectStore.list?.data?.map((item) => (
             <ContentCard
               key={item.id}
+              onClick={() => dashboardCtrl.goToUpdateProject(item.id)}
               subtitle=""
               header={item.caption}
               caption={item.description}
@@ -45,4 +46,4 @@ export const Dashboard: FC<NavIdProps> = memo((props: NavIdProps) => {
   );
 });
 
-Dashboard.displayName = 'Store';
+Dashboard.displayName = 'Dashboard';

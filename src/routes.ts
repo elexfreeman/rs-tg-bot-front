@@ -1,14 +1,14 @@
 import {
   RoutesConfig,
-//  createHashRouter,
+  //  createHashRouter,
   createBrowserRouter,
   createPanel,
   createRoot,
   createView,
-} from '@vkontakte/vk-mini-apps-router'
+} from '@vkontakte/vk-mini-apps-router';
 
-const SHOP_ROOT = 'shop'
-export const INITIAL_URL = '/'
+const SHOP_ROOT = 'shop';
+export const INITIAL_URL = '/';
 
 export enum ShopView {
   Main = 'main',
@@ -20,6 +20,7 @@ export enum AppRoutes {
   Store = 'store',
   Dashboard = '/',
   ProjectAdd = 'ProjectAdd',
+  ProjectUpdate = 'ProjectUpdate',
   ProjectInfo = 'ProductInfo',
 }
 
@@ -29,11 +30,12 @@ export const routes = RoutesConfig.create([
     createView(ShopView.Main, [
       createPanel(AppRoutes.Dashboard, '/', []),
       createPanel(AppRoutes.ProjectAdd, `/${AppRoutes.ProjectAdd}`, []),
-//      createPanel(ShopPanel.ProductInfo, `/${ShopPanel.ProductInfo}`, []),
-//      createPanel(ShopPanel.ShoppingCart, `/${ShopPanel.ShoppingCart}`, []),
+      createPanel(AppRoutes.ProjectUpdate, `/${AppRoutes.ProjectUpdate}/:project_id`, []),
+      //      createPanel(ShopPanel.ProductInfo, `/${ShopPanel.ProductInfo}`, []),
+      //      createPanel(ShopPanel.ShoppingCart, `/${ShopPanel.ShoppingCart}`, []),
     ]),
   ]),
-])
+]);
 
 /** Передача массива маршрутов для создания роутера */
-export const router = createBrowserRouter(routes.getRoutes())
+export const router = createBrowserRouter(routes.getRoutes());

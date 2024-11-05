@@ -17,6 +17,7 @@ import { CustomTabbar } from './components';
 
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { ProjectAdd } from './pages/Project/ProjectAdd';
+import { ProjectUpdate } from './pages/Project/ProjectUpdate';
 
 import { ProjectCtrl } from './pages/Project/project_ctrl';
 // import { DashboardCtrl } from './pages/Dashboard/dashboard_ctrl';
@@ -72,6 +73,7 @@ export const App: FC = () => {
           >
             <Dashboard nav={AppRoutes.Dashboard} />
             <ProjectAdd nav={AppRoutes.ProjectAdd} />
+            <ProjectUpdate nav={AppRoutes.ProjectUpdate} />
           </View>
         </Epic>
       </SplitCol>

@@ -47,8 +47,8 @@ export const infoProject = async (projectId: Partial<number>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset()({
       method: 'post',
-      url: '/project/info',
-      data: { projectId },
+      url: '/project/get',
+      data: { id: projectId },
     });
     const out:Partial<ProjectI> = data.data;
     return out;
