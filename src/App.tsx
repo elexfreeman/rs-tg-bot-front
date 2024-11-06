@@ -20,18 +20,24 @@ import { ProjectAdd } from './pages/Project/ProjectAdd';
 import { ProjectUpdate } from './pages/Project/ProjectUpdate';
 
 import { ProjectCtrl } from './pages/Project/project_ctrl';
-// import { DashboardCtrl } from './pages/Dashboard/dashboard_ctrl';
 import { useProjectStore, setProjectStore } from './store/project.store';
+import { useContractorStore, setContractorStore } from './store/contractor.store';
 import { DashboardCtrl } from './pages/Dashboard/dashboard_ctrl';
+import {ContractorCtrl} from './pages/Contractor/contractor_ctrl';
+
 
 export const App: FC = () => {
   const routerPopout = usePopout();
+
   const projectStore = useProjectStore();
+  const contractorStore = useContractorStore();
+
   /** Возвращает объект с помощью которого можно совершать переходы в навигации */
   const routeNavigator = useRouteNavigator();
 
   DashboardCtrl.init(routeNavigator, projectStore, setProjectStore);
   ProjectCtrl.init(routeNavigator, projectStore, setProjectStore);
+  ContractorCtrl.init(routeNavigator, contractorStore, setContractorStore);
 
   /** Получаем текущую позицию */
   const {

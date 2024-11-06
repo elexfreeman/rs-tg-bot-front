@@ -22,6 +22,10 @@ export enum AppRoutes {
   ProjectAdd = 'ProjectAdd',
   ProjectUpdate = 'ProjectUpdate',
   ProjectInfo = 'ProductInfo',
+  ContractorList = 'ContractorList',
+  ContractorAdd = 'ContractorAdd',
+  ContractorUpdate = 'ContractorUpdate',
+  ContractorInfo = 'ContractorInfo',
 }
 
 /** Настройка типизированной конфигурации маршрутов */
@@ -31,6 +35,9 @@ export const routes = RoutesConfig.create([
       createPanel(AppRoutes.Dashboard, '/', []),
       createPanel(AppRoutes.ProjectAdd, `/${AppRoutes.ProjectAdd}`, []),
       createPanel(AppRoutes.ProjectUpdate, `/${AppRoutes.ProjectUpdate}/:project_id`, []),
+      createPanel(AppRoutes.ContractorList, `/${AppRoutes.ContractorList}`, []),
+      createPanel(AppRoutes.ContractorAdd, `/${AppRoutes.ContractorAdd}`, []),
+      createPanel(AppRoutes.ContractorUpdate, `/${AppRoutes.ContractorUpdate}/:contractor_id`, []),
       //      createPanel(ShopPanel.ProductInfo, `/${ShopPanel.ProductInfo}`, []),
       //      createPanel(ShopPanel.ShoppingCart, `/${ShopPanel.ShoppingCart}`, []),
     ]),

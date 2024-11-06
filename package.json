@@ -8,7 +8,7 @@
     "lint:prettier": "prettier --check .",
     "lint:ci": "npm run lint:eslint & npm run lint:prettier",
     "prettier:fix": "prettier --write .",
-    "predeploy": "react-scripts build"
+    "build": "react-scripts build"
   },
   "engines": {
     "node": ">=12.0.0"

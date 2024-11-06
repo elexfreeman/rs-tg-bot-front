@@ -41,3 +41,4 @@ build.zip
 #ssl
 localhost.pem
 localhost-key.pem
+deploy.sh

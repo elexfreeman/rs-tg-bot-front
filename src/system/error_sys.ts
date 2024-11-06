@@ -17,6 +17,7 @@ export class Result<T> implements ResultI<T> {
       out.data = await callback();
     } catch (e) {
       out.error = e;
+      alert(e);
     }
     return out;
   }
