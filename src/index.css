@@ -98,3 +98,40 @@
     overflow: auto;
   }
 }
+
+.text-wrap {
+  text-wrap: auto;
+}
+
+.table-cache {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.table-cache-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-cache-item__dot {
+  text-align: center;
+}
+
+.table-cache-item__summa {
+  text-align: right;
+}
+
+.table-cache-item__date {
+  display: flex;
+  gap: 10px;
+}
+
+.color-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ddd;
+}

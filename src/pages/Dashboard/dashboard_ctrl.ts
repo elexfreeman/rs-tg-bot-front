@@ -57,6 +57,13 @@ export class DashboardCtrl {
     this.routeNavigator.push(`ProjectAdd`);
   }
 
+  goToInfoProject(projectId?: number) {
+    if (!this.isInit) {
+      return;
+    }
+    this.routeNavigator.push(`ProjectInfo/${projectId}`);
+  }
+
   goToUpdateProject(projectId?: number) {
     if (!this.isInit) {
       return;

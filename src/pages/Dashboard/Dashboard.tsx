@@ -34,7 +34,7 @@ export const Dashboard: FC<NavIdProps> = memo((props: NavIdProps) => {
           {projectStore.list?.data?.map((item) => (
             <ContentCard
               key={item.id}
-              onClick={() => dashboardCtrl.goToUpdateProject(item.id)}
+              onClick={() => dashboardCtrl.goToInfoProject(item.id)}
               subtitle=""
               header={item.caption}
               caption={item.description}

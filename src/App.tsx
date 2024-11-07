@@ -18,13 +18,16 @@ import { CustomTabbar } from './components';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { ProjectAdd } from './pages/Project/ProjectAdd';
 import { ProjectUpdate } from './pages/Project/ProjectUpdate';
+import { ProjectInfo } from './pages/Project/ProjectInfo';
 
 import { ProjectCtrl } from './pages/Project/project_ctrl';
 import { useProjectStore, setProjectStore } from './store/project.store';
-import { useContractorStore, setContractorStore } from './store/contractor.store';
+import {
+  useContractorStore,
+  setContractorStore,
+} from './store/contractor.store';
 import { DashboardCtrl } from './pages/Dashboard/dashboard_ctrl';
-import {ContractorCtrl} from './pages/Contractor/contractor_ctrl';
-
+import { ContractorCtrl } from './pages/Contractor/contractor_ctrl';
 
 export const App: FC = () => {
   const routerPopout = usePopout();
@@ -80,6 +83,7 @@ export const App: FC = () => {
             <Dashboard nav={AppRoutes.Dashboard} />
             <ProjectAdd nav={AppRoutes.ProjectAdd} />
             <ProjectUpdate nav={AppRoutes.ProjectUpdate} />
+            <ProjectInfo nav={AppRoutes.ProjectInfo} />
           </View>
         </Epic>
       </SplitCol>

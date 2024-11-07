@@ -3,7 +3,6 @@ import { getTelegram } from 'src/telegram';
 
 export const apiRequset = async <T>(url: string, data: T) => {
   let auth = process.env.REACT_APP_DEV_AUTH;
-  console.log(process.env.REACT_APP_STEND);
   if (process.env.REACT_APP_STEND === 'prod') {
     auth = getTelegram().WebApp.initData || '';
   }

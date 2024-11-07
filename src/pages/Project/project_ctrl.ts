@@ -86,4 +86,11 @@ export class ProjectCtrl {
     }
     this.routeNavigator.back();
   }
+
+  goToUpdateProject(projectId?: number) {
+    if (!this.isInit) {
+      return;
+    }
+    this.routeNavigator.push(`/ProjectUpdate/${projectId}`);
+  }
 }
