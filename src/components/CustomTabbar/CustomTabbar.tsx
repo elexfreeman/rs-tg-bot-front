@@ -1,7 +1,7 @@
 import { FC, memo } from 'react'
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router'
-import { Counter, TabbarItem, Tabbar } from '@vkontakte/vkui'
-import { Icon28ShoppingCartOutline, Icon28HomeOutline } from '@vkontakte/icons'
+import { TabbarItem, Tabbar } from '@vkontakte/vkui'
+import { Icon28Users3Outline, Icon28HomeOutline } from '@vkontakte/icons'
 import { AppRoutes } from 'src/routes'
 
 export type CustomTabbarProps = {
@@ -12,34 +12,33 @@ export const CustomTabbar: FC<CustomTabbarProps> = memo(
   ({ activePanel }: CustomTabbarProps) => {
     const routeNavigator = useRouteNavigator()
 
-    const onPaymantTabbarItemClick = () => {
-      if (activePanel === AppRoutes.ShoppingCart) return
-      routeNavigator.push(`/${AppRoutes.ShoppingCart}`)
+    const onContractorTabbarItemClick = () => {
+      if (activePanel === AppRoutes.ContractorList) return
+      routeNavigator.push(`/${AppRoutes.ContractorList}`);
     }
 
-    const onViewingTabbarItemClick = () => {
-      if (activePanel !== AppRoutes.ShoppingCart) return
-      routeNavigator.push('/')
+    const onDashboardTabbarItemClick = () => {
+      if (activePanel === AppRoutes.Dashboard) return
+      routeNavigator.push('/');
     }
 
     return (
       <Tabbar>
         <TabbarItem
-          onClick={onViewingTabbarItemClick}
-          selected={activePanel !== AppRoutes.ShoppingCart}
-          data-story="feed"
-          text="Каталог"
+          onClick={onDashboardTabbarItemClick}
+          selected={activePanel === AppRoutes.Dashboard}
+          data-story="dashboard"
+          aria-label='home'
         >
           <Icon28HomeOutline />
         </TabbarItem>
         <TabbarItem
-          onClick={onPaymantTabbarItemClick}
+          onClick={onContractorTabbarItemClick}
           selected={activePanel === AppRoutes.ShoppingCart}
-          data-story="messages"
-          indicator={ <Counter size="s" mode="prominent">0</Counter> }
-          text="Корзина"
+          data-story="contractor"
+          aria-label='contractor'
         >
-          <Icon28ShoppingCartOutline />
+          <Icon28Users3Outline />
         </TabbarItem>
       </Tabbar>
     )

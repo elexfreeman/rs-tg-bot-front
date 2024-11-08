@@ -20,6 +20,11 @@ import { ProjectAdd } from './pages/Project/ProjectAdd';
 import { ProjectUpdate } from './pages/Project/ProjectUpdate';
 import { ProjectInfo } from './pages/Project/ProjectInfo';
 
+import { ContractorAdd } from './pages/Contractor/ContractorAdd';
+import { ContractorUpdate } from './pages/Contractor/ContractorUpdate';
+// import { ContractorInfo } from './pages/Contractor/ContractorInfo';
+import { ContractorList } from './pages/Contractor/ContractorList';
+
 import { ProjectCtrl } from './pages/Project/project_ctrl';
 import { useProjectStore, setProjectStore } from './store/project.store';
 import {
@@ -84,6 +89,9 @@ export const App: FC = () => {
             <ProjectAdd nav={AppRoutes.ProjectAdd} />
             <ProjectUpdate nav={AppRoutes.ProjectUpdate} />
             <ProjectInfo nav={AppRoutes.ProjectInfo} />
+            <ContractorAdd nav={AppRoutes.ContractorAdd} />
+            <ContractorUpdate nav={AppRoutes.ContractorUpdate} />
+            <ContractorList nav={AppRoutes.ContractorList} />
           </View>
         </Epic>
       </SplitCol>

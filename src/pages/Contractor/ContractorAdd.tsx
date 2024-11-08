@@ -20,7 +20,7 @@ export const ContractorAdd: FC<NavIdProps> = memo(
           delimiter="none"
           before={<PanelHeaderBack onClick={() => contractorCtrl.goBack()} />}
         >
-          Новый проект
+          Новый контрагент
         </PanelHeader>
         <Group description="">
           <ContractorAddEditForm contractor={newContractor} />

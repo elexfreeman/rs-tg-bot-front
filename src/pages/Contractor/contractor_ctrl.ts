@@ -106,13 +106,13 @@ export class ContractorCtrl {
     if (!this.isInit) {
       return;
     }
-    this.routeNavigator.push(`ContractorAdd`);
+    this.routeNavigator.push(`/ContractorAdd`);
   }
 
   goToUpdateContractor(contractorId?: number) {
     if (!this.isInit) {
       return;
     }
-    this.routeNavigator.push(`ContractorUpdate/${contractorId}`);
+    this.routeNavigator.push(`/ContractorUpdate/${contractorId}`);
   }
 }

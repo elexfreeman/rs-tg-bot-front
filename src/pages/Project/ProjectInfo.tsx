@@ -12,7 +12,7 @@ import {
   CellButton,
   Separator,
 } from '@vkontakte/vkui';
-import { Icon20GearOutline } from '@vkontakte/icons';
+import { Icon20GearOutline, Icon28AddOutline } from '@vkontakte/icons';
 import { ProjectCtrl } from './project_ctrl';
 import { ProjectI } from 'src/api/project_api';
 import { useProjectStore } from 'src/store/project.store';
@@ -62,6 +62,12 @@ export const ProjectInfo: FC<NavIdProps> = memo((props: NavIdProps) => {
         </CellButton>
       </Group>
       <Group mode="plain" header={<Header mode="secondary">Платежи</Header>}>
+          <CellButton
+            onClick={() => projectCtrl.goToAddCache()}
+            before={<Icon28AddOutline />}
+          >
+            Добавить платеж
+          </CellButton>
         {table.map(() => (
           <>
             <div className="table-cache">

@@ -12,7 +12,7 @@ import { Icon28AddOutline } from '@vkontakte/icons';
 import { ContractorCtrl } from './contractor_ctrl';
 import { useContractorStore } from 'src/store/contractor.store';
 
-export const Contractor: FC<NavIdProps> = memo((props: NavIdProps) => {
+export const ContractorList: FC<NavIdProps> = memo((props: NavIdProps) => {
   const contractorCtrl = ContractorCtrl.getInstance();
   const contractorStore = useContractorStore();
 
@@ -29,7 +29,7 @@ export const Contractor: FC<NavIdProps> = memo((props: NavIdProps) => {
             onClick={() => contractorCtrl.goToAddContractor()}
             before={<Icon28AddOutline />}
           >
-            Добавить проект
+            Добавить контрагент
           </CellButton>
           {contractorStore.list?.data?.map((item) => (
             <ContentCard
@@ -46,4 +46,4 @@ export const Contractor: FC<NavIdProps> = memo((props: NavIdProps) => {
   );
 });
 
-Contractor.displayName = 'Contractor';
+ContractorList.displayName = 'Contractor';

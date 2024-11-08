@@ -93,4 +93,11 @@ export class ProjectCtrl {
     }
     this.routeNavigator.push(`/ProjectUpdate/${projectId}`);
   }
+
+  goToAddCache() {
+    if (!this.isInit) {
+      return;
+    }
+    this.routeNavigator.push(`/`);
+  }
 }
