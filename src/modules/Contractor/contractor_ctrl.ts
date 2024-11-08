@@ -3,16 +3,15 @@ import {
   ContractorStoreI,
   setContractorStore,
   defaultState as contractorStoreDefaultState,
-} from '../../store/contractor.store';
+} from './contractor.store';
 import {
-  getContractorList,
   addContractor,
   updateContractor,
   infoContractor,
   ContractorI,
+  getContractorList
 } from 'src/api/contractor_api';
 import { delay } from 'src/utils';
-import { getLang } from 'src/lang/lang';
 
 export class ContractorCtrl {
   private isInit = false;
@@ -47,10 +46,6 @@ export class ContractorCtrl {
       ContractorCtrl.instance = new ContractorCtrl();
     }
     return ContractorCtrl.instance;
-  }
-
-  async getLang() {
-    return getLang();
   }
 
   async addContractor(contractor: Partial<ContractorI>) {
@@ -93,13 +88,18 @@ export class ContractorCtrl {
     this.routeNavigator.back();
   }
 
-  async contractorList() {
+  goToUpdateContractor(contractorId?: number) {
     if (!this.isInit) {
       return;
     }
-      this.contractorStore.list = await getContractorList();
-      this.setContractorStore({ ...this.contractorStore });
-      return this.contractorStore;
+    this.routeNavigator.push(`/ContractorUpdate/${contractorId}`);
+  }
+
+  goToAddCache() {
+    if (!this.isInit) {
+      return;
+    }
+    this.routeNavigator.push(`/`);
   }
 
   goToAddContractor() {
@@ -109,10 +109,20 @@ export class ContractorCtrl {
     this.routeNavigator.push(`/ContractorAdd`);
   }
 
-  goToUpdateContractor(contractorId?: number) {
+  goToInfoContractor(contractorId?: number) {
     if (!this.isInit) {
       return;
     }
+    // this.routeNavigator.push(`/ContractorInfo/${contractorId}`);
     this.routeNavigator.push(`/ContractorUpdate/${contractorId}`);
+  }
+
+  async contractorList() {
+    if (!this.isInit) {
+      return;
+    }
+      this.contractorStore.list = await getContractorList();
+      this.setContractorStore({ ...this.contractorStore });
+      return this.contractorStore;
   }
 }

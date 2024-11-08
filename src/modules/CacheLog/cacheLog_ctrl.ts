@@ -3,7 +3,7 @@ import {
   CacheLogStoreI,
   setCacheLogStore,
   defaultState as cacheLogStoreDefaultState,
-} from '../../store/cacheLog.store';
+} from 'src/modules/CacheLog/cacheLog.store';
 import {
   getCacheLogList,
   addCacheLog,
@@ -16,6 +16,7 @@ import { getLang } from 'src/lang/lang';
 
 export class CacheLogCtrl {
   private isInit = false;
+
   cacheLogStore: CacheLogStoreI;
   setCacheLogStore: (payload: CacheLogStoreI) => void;
   routeNavigator: RouteNavigator;

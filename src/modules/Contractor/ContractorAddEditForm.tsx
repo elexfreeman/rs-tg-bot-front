@@ -7,17 +7,17 @@ import {
   Button,
 } from '@vkontakte/vkui';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { ProjectCtrl } from './project_ctrl';
-import { ProjectI } from 'src/api/project_api';
+import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
+import { ContractorI } from 'src/api/contractor_api';
 
-interface ProjectAddEditFormPops {
-  project?: Partial<ProjectI>;
+interface ContractorAddEditFormPops {
+  contractor?: Partial<ContractorI>;
   isUpdate?: boolean;
 }
 
-export const ProjectAddEditForm: FC<ProjectAddEditFormPops> = memo(
-  (props: ProjectAddEditFormPops) => {
-    const projectCtrl = ProjectCtrl.getInstance();
+export const ContractorAddEditForm: FC<ContractorAddEditFormPops> = memo(
+  (props: ContractorAddEditFormPops) => {
+    const contractorCtrl = ContractorCtrl.getInstance();
 
     const {
       register,
@@ -25,17 +25,17 @@ export const ProjectAddEditForm: FC<ProjectAddEditFormPops> = memo(
       control,
       formState: { errors },
     } = useForm({
-      defaultValues: props.project,
-      values: props.project,
+      defaultValues: props.contractor,
+      values: props.contractor,
     },);
 
-    const onSubmit: SubmitHandler<Partial<ProjectI>> = (
-      data: Partial<ProjectI>
+    const onSubmit: SubmitHandler<Partial<ContractorI>> = (
+      data: Partial<ContractorI>
     ) => {
       if (props.isUpdate) {
-        projectCtrl.updateProject(data);
+        contractorCtrl.updateContractor(data);
       } else {
-        projectCtrl.addProject(data);
+        contractorCtrl.addContractor(data);
       }
     };
 

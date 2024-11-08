@@ -10,7 +10,7 @@ import {
 import { CacheLogCtrl } from './cacheLog_ctrl';
 import { CacheLogI } from 'src/api/cacheLog_api';
 import { CacheLogAddEditForm } from './CacheLogAddEditForm';
-import { useCacheLogStore } from 'src/store/cacheLog.store';
+import { useCacheLogStore } from 'src/modules/CacheLog/cacheLog.store';
 import { useParams } from '@vkontakte/vk-mini-apps-router';
 
 export const CacheLogUpdate: FC<NavIdProps> = memo((props: NavIdProps) => {

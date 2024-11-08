@@ -3,12 +3,13 @@ import {
   ProjectStoreI,
   setProjectStore,
   defaultState as projectStoreDefaultState,
-} from '../../store/project.store';
+} from './project.store';
 import {
   addProject,
   updateProject,
   infoProject,
   ProjectI,
+  getProjectList
 } from 'src/api/project_api';
 import { delay } from 'src/utils';
 
@@ -99,5 +100,28 @@ export class ProjectCtrl {
       return;
     }
     this.routeNavigator.push(`/`);
+  }
+
+  goToAddProject() {
+    if (!this.isInit) {
+      return;
+    }
+    this.routeNavigator.push(`ProjectAdd`);
+  }
+
+  goToInfoProject(projectId?: number) {
+    if (!this.isInit) {
+      return;
+    }
+    this.routeNavigator.push(`ProjectInfo/${projectId}`);
+  }
+
+  async projectList() {
+    if (!this.isInit) {
+      return;
+    }
+      this.projectStore.list = await getProjectList();
+      this.setProjectStore({ ...this.projectStore });
+      return this.projectStore;
   }
 }

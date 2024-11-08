@@ -7,7 +7,7 @@ import {
 } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import { CacheLogCtrl } from './cacheLog_ctrl';
-import { useCacheLogStore } from 'src/store/cacheLog.store';
+import { useCacheLogStore } from 'src/modules/CacheLog/cacheLog.store';
 
 export const CacheLogList = (props: { projectId: number }) => {
   const cacheLogCtrl = CacheLogCtrl.getInstance();

@@ -26,6 +26,8 @@ export enum AppRoutes {
   ContractorAdd = 'ContractorAdd',
   ContractorUpdate = 'ContractorUpdate',
   ContractorInfo = 'ContractorInfo',
+  CacheLogAdd = 'CacheLogAdd',
+  CacheLogUpdate = 'CacheLogUpdate',
 }
 
 /** Настройка типизированной конфигурации маршрутов */
@@ -36,6 +38,7 @@ export const routes = RoutesConfig.create([
       createPanel(AppRoutes.ProjectAdd, `/${AppRoutes.ProjectAdd}`, []),
       createPanel(AppRoutes.ProjectUpdate, `/${AppRoutes.ProjectUpdate}/:project_id`, []),
       createPanel(AppRoutes.ProjectInfo, `/${AppRoutes.ProjectInfo}/:project_id`, []),
+      createPanel(AppRoutes.CacheLogAdd, `/${AppRoutes.ProjectInfo}/:project_id/${AppRoutes.CacheLogAdd}`, []),
       createPanel(AppRoutes.ContractorList, `/${AppRoutes.ContractorList}`, []),
       createPanel(AppRoutes.ContractorAdd, `/${AppRoutes.ContractorAdd}`, []),
       createPanel(AppRoutes.ContractorUpdate, `/${AppRoutes.ContractorUpdate}/:contractor_id`, []),
