@@ -1,3 +1,6 @@
+body {
+  background: #fff;
+}
 :root {
   --min-product-card-width: 130px;
   --max-product-card-width: 195px;
