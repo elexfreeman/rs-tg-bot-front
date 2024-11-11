@@ -1,29 +1,42 @@
-import { FC, memo, useEffect } from 'react';
-import {
-  NavIdProps,
-  Panel,
-  PanelHeader,
-  Group,
-  PanelHeaderBack,
-} from '@vkontakte/vkui';
-// import { Icon20User,Icon24WalletOutline } from '@vkontakte/icons'
+import { useEffect } from 'react';
+import { Panel, PanelHeader, Group, PanelHeaderBack } from '@vkontakte/vkui';
 import { CacheLogCtrl } from './cacheLog_ctrl';
 import { CacheLogI } from 'src/api/cacheLog_api';
 import { CacheLogAddEditForm } from './CacheLogAddEditForm';
-import { useCacheLogStore } from 'src/modules/CacheLog/cacheLog.store';
-import { useParams } from '@vkontakte/vk-mini-apps-router';
+import {
+  useCacheLogStore,
+  setCacheLogStore,
+} from 'src/modules/CacheLog/cacheLog.store';
 
-export const CacheLogUpdate: FC<NavIdProps> = memo((props: NavIdProps) => {
+export const CacheLogUpdate = (props: {
+  projectId: number;
+  cacheLogId: number;
+  contractorForm?: (props: {
+    onSelectContractor?: (contractorId: number) => void;
+  }) => React.ReactNode;
+}) => {
   const cacheLogStore = useCacheLogStore();
   const cacheLogCtrl = CacheLogCtrl.getInstance();
-    const params = useParams<'cacheLog_id'>();
 
   useEffect(() => {
-    cacheLogCtrl.infoCacheLog(Number(params?.cacheLog_id));
+    cacheLogCtrl.infoCacheLog(props.cacheLogId);
   }, []);
 
-  const newCacheLog: Partial<CacheLogI> = {
+  const cacheLogData: Partial<CacheLogI> = {
     ...cacheLogStore.info.data,
+  };
+
+  const getContractorForm = () => {
+    const onSelectContractor = (contractorId: number) => {
+      if (cacheLogStore.info.data) {
+        cacheLogStore.info.data.contractor_id = contractorId;
+        setCacheLogStore({ ...cacheLogStore });
+      }
+    };
+    if (props.contractorForm) {
+      return <>props.contractorForm({onSelectContractor})</>;
+    }
+    return <></>;
   };
 
   return (
@@ -35,10 +48,14 @@ export const CacheLogUpdate: FC<NavIdProps> = memo((props: NavIdProps) => {
         Редактировать платеж
       </PanelHeader>
       <Group description="">
-        <CacheLogAddEditForm cacheLog={newCacheLog} isUpdate />
+        <CacheLogAddEditForm
+          cacheLog={cacheLogData}
+          isUpdate
+          contractorForm={getContractorForm()}
+        />
       </Group>
     </Panel>
   );
-});
+};
 
 CacheLogUpdate.displayName = 'CacheLogUpdate';

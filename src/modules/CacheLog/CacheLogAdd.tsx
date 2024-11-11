@@ -1,36 +1,51 @@
-import { FC, memo } from 'react';
-import {NavIdProps, Panel, PanelHeader, Group, PanelHeaderBack } from '@vkontakte/vkui';
-// import { Icon20User,Icon24WalletOutline } from '@vkontakte/icons'
-import { CacheLogCtrl } from './cacheLog_ctrl';
-import { CacheLogI } from 'src/api/cacheLog_api';
-import { CacheLogAddEditForm } from './CacheLogAddEditForm';
-import { useParams } from '@vkontakte/vk-mini-apps-router';
+import { useEffect } from 'react';
+import { Group } from '@vkontakte/vkui';
+import { getCacheLogDefault, CacheLogI } from 'src/api/cacheLog_api';
+import { CacheLogAddEditForm } from 'src/modules/CacheLog/CacheLogAddEditForm';
+import {
+  useCacheLogStore,
+  setCacheLogStore,
+} from 'src/modules/CacheLog/cacheLog.store';
+import { TSelectContractor } from './cacheLog_ctrl';
+import {SelectFieldI} from 'src/types';
 
-export const CacheLogAdd: FC<NavIdProps> = memo(
-  (props: NavIdProps) => {
-    const params = useParams<'project_id'>();
-    const newCacheLog: CacheLogI = {
-      id: 0,
-      caption: '',
-      description: '',
-      project_id: Number(params?.project_id),
+export const CacheLogAdd = (props: {
+  projectId: number;
+  contractorForm?: (props: {
+    onSelectContractor?: TSelectContractor;
+  }) => React.ReactNode;
+}) => {
+  const cacheLogStore = useCacheLogStore();
+
+  useEffect(() => {
+    cacheLogStore.info.data = getCacheLogDefault();
+    setCacheLogStore({ ...cacheLogStore });
+  }, []);
+
+  const cacheLogData: Partial<CacheLogI> = {
+    ...cacheLogStore.info.data,
+  };
+  const getContractorForm = () => {
+    const onSelectContractor = (contractor: SelectFieldI) => {
+      if (cacheLogStore.info.data) {
+        cacheLogStore.info.data.contractor_id = contractor.id;
+        setCacheLogStore({ ...cacheLogStore });
+      }
     };
+    if (props.contractorForm) {
+      return <>{props.contractorForm({ onSelectContractor })}</>;
+    }
+    return <></>;
+  };
 
-  const cacheLogCtrl = CacheLogCtrl.getInstance();
-    return (
-      <Panel className="Panel__fullScreen" {...props}>
-        <PanelHeader
-          delimiter="none"
-          before={<PanelHeaderBack onClick={() => cacheLogCtrl.goBack()} />}
-        >
-          Новый платеж
-        </PanelHeader>
-        <Group description="">
-          <CacheLogAddEditForm cacheLog={newCacheLog} />
-        </Group>
-      </Panel>
-    );
-  }
-);
+  return (
+    <Group description="">
+      <CacheLogAddEditForm
+        cacheLog={cacheLogData}
+        contractorForm={getContractorForm()}
+      />
+    </Group>
+  );
+};
 
 CacheLogAdd.displayName = 'CacheLogAdd';

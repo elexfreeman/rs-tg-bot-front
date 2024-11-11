@@ -13,6 +13,9 @@ import {
 } from 'src/api/cacheLog_api';
 import { delay } from 'src/utils';
 import { getLang } from 'src/lang/lang';
+import { SelectFieldI } from 'src/types';
+
+export type TSelectContractor = (contractor: SelectFieldI) => void;
 
 export class CacheLogCtrl {
   private isInit = false;
@@ -98,9 +101,9 @@ export class CacheLogCtrl {
     if (!this.isInit) {
       return;
     }
-      this.cacheLogStore.list = await getCacheLogList(projectId);
-      this.setCacheLogStore({ ...this.cacheLogStore });
-      return this.cacheLogStore;
+    this.cacheLogStore.list = await getCacheLogList(projectId);
+    this.setCacheLogStore({ ...this.cacheLogStore });
+    return this.cacheLogStore;
   }
 
   goToAddCacheLog(projectId: number) {
@@ -110,10 +113,12 @@ export class CacheLogCtrl {
     this.routeNavigator.push(`/ProjectInfo/${projectId}/CacheLogAdd`);
   }
 
-  goToUpdateCacheLog(cacheLogId?: number) {
+  goToUpdateCacheLog(projectId: number, cacheLogId: number) {
     if (!this.isInit) {
       return;
     }
-    this.routeNavigator.push(`/CacheLogUpdate/${cacheLogId}`);
+    this.routeNavigator.push(
+      `/ProjectInfo/${projectId}/CacheLogUpdate/${cacheLogId}`
+    );
   }
 }
