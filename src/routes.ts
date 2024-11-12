@@ -39,6 +39,7 @@ export const routes = RoutesConfig.create([
       createPanel(AppRoutes.ProjectUpdate, `/${AppRoutes.ProjectUpdate}/:project_id`, []),
       createPanel(AppRoutes.ProjectInfo, `/${AppRoutes.ProjectInfo}/:project_id`, []),
       createPanel(AppRoutes.CacheLogAdd, `/${AppRoutes.ProjectInfo}/:project_id/${AppRoutes.CacheLogAdd}`, []),
+      createPanel(AppRoutes.CacheLogUpdate, `/${AppRoutes.ProjectInfo}/:project_id/${AppRoutes.CacheLogUpdate}/:cache_log_id`, []),
       createPanel(AppRoutes.ContractorList, `/${AppRoutes.ContractorList}`, []),
       createPanel(AppRoutes.ContractorAdd, `/${AppRoutes.ContractorAdd}`, []),
       createPanel(AppRoutes.ContractorUpdate, `/${AppRoutes.ContractorUpdate}/:contractor_id`, []),

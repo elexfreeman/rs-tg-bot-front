@@ -20,7 +20,6 @@ export const CacheLogAdd = (props: {
 
   const cacheLogData: Partial<CacheLogI> = {
     ...cacheLogStore.info.data,
-    id: props.projectId,
   };
   return (
     <Group description="">

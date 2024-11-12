@@ -1,6 +1,6 @@
 import { bind } from '@react-rxjs/core';
 import { createSignal } from '@react-rxjs/utils';
-import { CacheLogI } from 'src/api/cacheLog_api';
+import { CacheLogI } from 'src/Entity/CacheLogE';
 import { ResultI } from 'src/system/error_sys';
 
 export interface CacheLogStoreI {

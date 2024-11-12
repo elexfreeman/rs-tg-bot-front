@@ -43,9 +43,9 @@ export const updateCacheLog = async (cacheLog: Partial<CacheLogI>) => {
   });
 };
 
-export const infoCacheLog = async (cacheLogId: Partial<number>) => {
+export const infoCacheLog = async (cacheLogId?: number, projectId?: number) => {
   return await Result.catchError(async () => {
-    const data = await apiRequset('/cache_log/get', { id: cacheLogId });
+    const data = await apiRequset('/cache_log/get', { id: cacheLogId, project_id: projectId });
     const out: Partial<CacheLogI> = data;
     return out;
   });

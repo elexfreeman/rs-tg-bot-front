@@ -7,7 +7,7 @@ import {
 } from '@vkontakte/vkui';
 import { CacheLogCtrl } from './cacheLog_ctrl';
 import { CacheLogI } from 'src/api/cacheLog_api';
-
+import { Store } from 'src/store/store';
 
 export const CacheLogAddEditForm = (props: {
   cacheLog?: Partial<CacheLogI>;
@@ -17,20 +17,23 @@ export const CacheLogAddEditForm = (props: {
   const cacheLogCtrl = CacheLogCtrl.getInstance();
 
   return (
-    <form onSubmit={(e) => cacheLogCtrl.onSubmit(e)}>
+    <form onSubmit={(e) => cacheLogCtrl.onSubmit(e, props.isUpdate)}>
       <FormLayoutGroup>
-        <FormItem
-          htmlFor="caption"
-          top="Название"
-        >
-         <Input id="caption" />
+        <FormItem htmlFor="caption" top="Название">
+          <Input
+            id="caption"
+            defaultValue={Store.getInstance().cacheLogStore.info.data?.caption}
+          />
         </FormItem>
         <FormItem top="Описание">
-         <Textarea placeholder="Описание проекта..." />
+          <Textarea
+            placeholder="Описание проекта..."
+            defaultValue={Store.getInstance().cacheLogStore.info.data?.description}
+          />
         </FormItem>
         {props.contractorForm && props.contractorForm}
         <FormItem>
-          <Button type='submit'>Сохранить</Button>
+          <Button type="submit">Сохранить</Button>
         </FormItem>
       </FormLayoutGroup>
     </form>

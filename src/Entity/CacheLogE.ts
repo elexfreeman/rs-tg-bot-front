@@ -4,4 +4,5 @@ export interface CacheLogI {
   contractor_id: number;
   caption: string;
   description: string;
+  created_at: string;
 }

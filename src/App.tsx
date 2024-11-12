@@ -25,6 +25,7 @@ import { ContractorAddPage } from './pages/Contractor/ContractorAddPage'; import
 import { ContractorListPage } from './pages/Contractor/ContractorListPage';
 
 import { CacheLogAddPage } from './pages/CacheLog/CacheLogAddPage';
+import { CacheLogUpdatePage } from './pages/CacheLog/CacheLogUpdatePage';
 
 import {
   useProjectStore,
@@ -100,6 +101,7 @@ export const App: FC = () => {
             <ContractorUpdatePage nav={AppRoutes.ContractorUpdate} />
             <ContractorListPage nav={AppRoutes.ContractorList} />
             <CacheLogAddPage nav={AppRoutes.CacheLogAdd} />
+            <CacheLogUpdatePage nav={AppRoutes.CacheLogUpdate} />
           </View>
         </Epic>
       </SplitCol>

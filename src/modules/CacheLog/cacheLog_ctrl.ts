@@ -6,6 +6,7 @@ import {
   updateCacheLog,
   infoCacheLog,
 } from 'src/api/cacheLog_api';
+import { infoContractor } from 'src/api/contractor_api';
 import { infoProject } from 'src/api/project_api';
 import { delay } from 'src/utils';
 import { getLang } from 'src/lang/lang';
@@ -69,7 +70,7 @@ export class CacheLogCtrl {
     }
   }
 
-  async infoCacheLog(cacheLogId: number) {
+  async infoCacheLog(cacheLogId: number, projectId: number) {
     if (!this.isInit) {
       return;
     }
@@ -78,9 +79,29 @@ export class CacheLogCtrl {
       ...Store.getInstance().cacheLogStore,
     });
     await delay();
-    Store.getInstance().cacheLogStore.info = await infoCacheLog(cacheLogId);
+    Store.getInstance().cacheLogStore.info = await infoCacheLog(
+      cacheLogId,
+      projectId
+    );
     Store.getInstance().setCacheLogStore({
       ...Store.getInstance().cacheLogStore,
+    });
+  }
+
+  async infoContractor(contractorId: number) {
+    if (!this.isInit) {
+      return;
+    }
+    Store.getInstance().contractorStore.info = { data: {} };
+    Store.getInstance().setContractorStore({
+      ...Store.getInstance().contractorStore,
+    });
+    await delay();
+    Store.getInstance().contractorStore.info = await infoContractor(
+      contractorId
+    );
+    Store.getInstance().setContractorStore({
+      ...Store.getInstance().contractorStore,
     });
   }
 
@@ -109,7 +130,7 @@ export class CacheLogCtrl {
     this.routeNavigator.push(`/ProjectInfo/${projectId}/CacheLogAdd`);
   }
 
-  goToUpdateCacheLog(projectId: number, cacheLogId: number) {
+  goToUpdateCacheLog(projectId?: number, cacheLogId?: number) {
     if (!this.isInit) {
       return;
     }
@@ -117,6 +138,7 @@ export class CacheLogCtrl {
       `/ProjectInfo/${projectId}/CacheLogUpdate/${cacheLogId}`
     );
   }
+
   onSubmit(e: React.SyntheticEvent, isUpdate?: boolean) {
     e.preventDefault();
     const target = e.target as typeof e.target & {
@@ -129,7 +151,7 @@ export class CacheLogCtrl {
         description: target.caption.value,
         project_id: Store.getInstance().projectStore.info.data?.id,
         contractor_id: Store.getInstance().contractorStore.info.data?.id,
-        id: 0,
+        id: Store.getInstance().contractorStore.info.data?.id,
       });
     } else {
       this.addCacheLog({
@@ -137,7 +159,6 @@ export class CacheLogCtrl {
         description: target.caption.value,
         project_id: Store.getInstance().projectStore.info.data?.id,
         contractor_id: Store.getInstance().contractorStore.info.data?.id,
-        id: Store.getInstance().contractorStore.info.data?.id,
       });
     }
   }
