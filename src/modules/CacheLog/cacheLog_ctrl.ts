@@ -6,8 +6,6 @@ import {
   updateCacheLog,
   infoCacheLog,
 } from 'src/api/cacheLog_api';
-import { infoContractor } from 'src/api/contractor_api';
-import { infoProject } from 'src/api/project_api';
 import { delay } from 'src/utils';
 import { getLang } from 'src/lang/lang';
 import { SelectFieldI } from 'src/types';
@@ -88,23 +86,6 @@ export class CacheLogCtrl {
     });
   }
 
-  async infoContractor(contractorId: number) {
-    if (!this.isInit) {
-      return;
-    }
-    Store.getInstance().contractorStore.info = { data: {} };
-    Store.getInstance().setContractorStore({
-      ...Store.getInstance().contractorStore,
-    });
-    await delay();
-    Store.getInstance().contractorStore.info = await infoContractor(
-      contractorId
-    );
-    Store.getInstance().setContractorStore({
-      ...Store.getInstance().contractorStore,
-    });
-  }
-
   goBack() {
     if (!this.isInit) {
       return;
@@ -161,14 +142,5 @@ export class CacheLogCtrl {
         contractor_id: Store.getInstance().contractorStore.info.data?.id,
       });
     }
-  }
-  async infoProject(projectId: number) {
-    if (!this.isInit) {
-      return;
-    }
-    Store.getInstance().projectStore.info = await infoProject(projectId);
-    Store.getInstance().setProjectStore({
-      ...Store.getInstance().projectStore,
-    });
   }
 }

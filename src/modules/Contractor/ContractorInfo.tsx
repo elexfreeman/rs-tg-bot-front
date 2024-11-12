@@ -19,6 +19,7 @@ export const ContractorInfo = (props: {
   const contractorStore = useContractorStore();
   const contractorCtrl = ContractorCtrl.getInstance();
   const params = useParams<'contractor_id'>();
+
   useEffect(() => {
     contractorCtrl.infoContractor(Number(params?.contractor_id));
   }, []);

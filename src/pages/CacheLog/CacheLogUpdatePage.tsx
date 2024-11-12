@@ -15,9 +15,13 @@ import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelec
 import { setModalStore } from 'src/modals/modal.store';
 import { useCacheLogStore } from 'src/store/cacheLog.store';
 import { useContractorStore } from 'src/store/contractor.store';
+import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
+import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
 
 export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
   const cacheLogCtrl = CacheLogCtrl.getInstance();
+  const projectCtrl = ProjectCtrl.getInstance();
+  const contractorCtrl = ContractorCtrl.getInstance();
   const params = useParams();
   const projectId = Number(params?.project_id);
   const cacheLogId = Number(params?.cache_log_id);
@@ -26,7 +30,7 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
 
   // заполняем инфу о проекте и затратах
   useEffect(() => {
-    cacheLogCtrl.infoProject(projectId);
+    projectCtrl.infoProject(projectId);
     cacheLogCtrl.infoCacheLog(cacheLogId, projectId);
   }, []);
 
@@ -34,7 +38,7 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
   const contractorId = cacheLogStore.info.data?.contractor_id;
   useEffect(() => {
     if (contractorId) {
-      cacheLogCtrl.infoContractor(contractorId);
+      contractorCtrl.infoContractor(contractorId);
     }
   }, [contractorId]);
 
