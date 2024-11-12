@@ -1,4 +1,4 @@
-import { FC, memo, useEffect } from 'react';
+import { FC, memo } from 'react';
 import {
   FormLayoutGroup,
   FormItem,
@@ -6,9 +6,8 @@ import {
   Textarea,
   Button,
 } from '@vkontakte/vkui';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
 import { ContractorI } from 'src/api/contractor_api';
+import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
 
 interface ContractorAddEditFormPops {
   contractor?: Partial<ContractorI>;
@@ -17,59 +16,26 @@ interface ContractorAddEditFormPops {
 
 export const ContractorAddEditForm: FC<ContractorAddEditFormPops> = memo(
   (props: ContractorAddEditFormPops) => {
-    const contractorCtrl = ContractorCtrl.getInstance();
-
-    const {
-      register,
-      handleSubmit,
-      control,
-      formState: { errors },
-    } = useForm({
-      defaultValues: props.contractor,
-      values: props.contractor,
-    },);
-
-    const onSubmit: SubmitHandler<Partial<ContractorI>> = (
-      data: Partial<ContractorI>
-    ) => {
-      if (props.isUpdate) {
-        contractorCtrl.updateContractor(data);
-      } else {
-        contractorCtrl.addContractor(data);
-      }
-    };
-
-    useEffect(() => {
-      register('caption');
-    }, []);
-
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={(e) => ContractorCtrl.getInstance().onSubmit(e, props.isUpdate)}>
+        <input type="hidden" name="id" value={props.contractor?.id} />
         <FormLayoutGroup>
-          <Controller name="id" control={control} render={() => <></>} />
           <FormItem
             htmlFor="caption"
             top="Название"
-            status={errors.caption ? 'error' : 'default'}
+            value={props.contractor?.caption}
           >
-            <Controller
-              name="caption"
-              rules={{ required: true }}
-              control={control}
-              render={({ field }) => <Input id="caption" {...field} />}
-            />
+            <Input name="caption" />
           </FormItem>
           <FormItem top="Описание">
-            <Controller
+            <Textarea
               name="description"
-              control={control}
-              render={({ field }) => (
-                <Textarea placeholder="Описание проекта..." {...field} />
-              )}
+              placeholder="Описание проекта..."
+              value={props.contractor?.description}
             />
           </FormItem>
           <FormItem>
-            <Button onClick={handleSubmit(onSubmit)}>Сохранить</Button>
+            <Button type="submit">Сохранить</Button>
           </FormItem>
         </FormLayoutGroup>
       </form>

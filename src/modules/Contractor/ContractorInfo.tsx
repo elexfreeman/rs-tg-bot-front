@@ -10,7 +10,7 @@ import {
 import { Icon20GearOutline } from '@vkontakte/icons';
 import { ContractorCtrl } from './contractor_ctrl';
 import { ContractorI } from 'src/api/contractor_api';
-import { useContractorStore } from 'src/modules/Contractor/contractor.store';
+import { useContractorStore } from 'src/store/contractor.store';
 import { useParams } from '@vkontakte/vk-mini-apps-router';
 
 export const ContractorInfo = (props: {

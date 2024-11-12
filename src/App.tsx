@@ -29,15 +29,17 @@ import { CacheLogAddPage } from './pages/CacheLog/CacheLogAddPage';
 import {
   useProjectStore,
   setProjectStore,
-} from './modules/Project/project.store';
+} from 'src/store/project.store';
 import {
   useContractorStore,
   setContractorStore,
-} from './modules/Contractor/contractor.store';
+} from 'src/store/contractor.store';
 import {
   useCacheLogStore,
   setCacheLogStore,
-} from './modules/CacheLog/cacheLog.store';
+} from 'src/store/cacheLog.store';
+
+import { Store } from './store/store';
 
 import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
 import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
@@ -46,16 +48,21 @@ import { CacheLogCtrl } from 'src/modules/CacheLog/cacheLog_ctrl';
 export const App: FC = () => {
   const routerPopout = usePopout();
 
+  /** Возвращает объект с помощью которого можно совершать переходы в навигации */
+  const routeNavigator = useRouteNavigator();
+
+  const store = Store.getInstance();
   const projectStore = useProjectStore();
   const contractorStore = useContractorStore();
   const cacheLogStore = useCacheLogStore();
 
-  /** Возвращает объект с помощью которого можно совершать переходы в навигации */
-  const routeNavigator = useRouteNavigator();
+  store.initProjectStore(projectStore, setProjectStore);
+  store.initCacheLogStore(cacheLogStore, setCacheLogStore);
+  store.initContractorStore(contractorStore, setContractorStore);
 
-  ProjectCtrl.init(routeNavigator, projectStore, setProjectStore);
-  ContractorCtrl.init(routeNavigator, contractorStore, setContractorStore);
-  CacheLogCtrl.init(routeNavigator, cacheLogStore, setCacheLogStore);
+  ProjectCtrl.init(routeNavigator);
+  ContractorCtrl.init(routeNavigator);
+  CacheLogCtrl.init(routeNavigator);
 
   /** Получаем текущую позицию */
   const {
@@ -71,18 +78,7 @@ export const App: FC = () => {
     [routeNavigator]
   );
 
-  /**
-            <CacheLogAdd nav={AppRoutes.CacheLogAdd} />
-   * SplitLayout - Компонент-контейнер для реализации интерфейса с многоколоночной структурой [https://vkcom.github.io/VKUI/#/SplitLayout]
-   * SplitCol Компонент-обертка для отрисовки колонки в многоколоночном интерфейсе. [https://vkcom.github.io/VKUI/#/SplitCol]
-   * View - хранилище Panel [https://vkcom.github.io/VKUI/#/View]
-   * Panel - контент одной страницы [https://vkcom.github.io/VKUI/#/Panel]
-   */
   return (
-    /**
-     * popout - свойство для отрисовки Alert ActionSheet ScreenSpinner
-     * modal - свойство для отрисовки модальных страниц(ModalRoot)
-     */
     <SplitLayout popout={routerPopout} modal={<Modals />}>
       <title>{process.env.REACT_APP_WEBSITE_NAME}</title>
       <SplitCol>

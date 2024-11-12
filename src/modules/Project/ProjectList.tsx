@@ -7,7 +7,7 @@ import {
 } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
-import { useProjectStore } from 'src/modules/Project/project.store';
+import { useProjectStore } from 'src/store/project.store';
 
 export const ProjectList = () => {
   const projectCtrl = ProjectCtrl.getInstance();

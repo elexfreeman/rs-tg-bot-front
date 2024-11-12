@@ -2,19 +2,23 @@ import { useEffect } from 'react';
 import { Group, CardGrid, ContentCard, CellButton } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
-import { useContractorStore } from 'src/modules/Contractor/contractor.store';
-import { SelectFieldI } from 'src/types';
+import {
+  useContractorStore,
+} from 'src/store/contractor.store';
+import { ContractorI } from 'src/Entity/ContractorE';
 
-export const ContractorListSelect = (props: {
-  onSelectContractor: (contractor: SelectFieldI) => void;
-  selected?: SelectFieldI;
-}) => {
+export const ContractorListSelect = (props: { onSelect: () => void }) => {
   const contractorCtrl = ContractorCtrl.getInstance();
   const contractorStore = useContractorStore();
 
   useEffect(() => {
     contractorCtrl.contractorList();
   }, []);
+
+  const onSelect = (item: Partial<ContractorI>) => {
+    contractorCtrl.setInfo(item)
+    props.onSelect();
+  }
 
   return (
     <Group>
@@ -28,13 +32,8 @@ export const ContractorListSelect = (props: {
         {contractorStore.list?.data?.map((item) => (
           <ContentCard
             key={item.id}
-            onClick={() =>
-              props.onSelectContractor({
-                id: item.id,
-                caption: item.caption,
-              })
-            }
-            subtitle={props?.selected?.id===item.id && 'выбран'}
+            onClick={() => onSelect(item)}
+            subtitle={contractorCtrl.isSelected(Number(item.id)) && 'выбран'}
             header={item.caption}
             caption={item.description}
           />
@@ -44,4 +43,4 @@ export const ContractorListSelect = (props: {
   );
 };
 
-ContractorListSelect.displayName = 'ContractorList';
+ContractorListSelect.displayName = 'ContractorListSelect';

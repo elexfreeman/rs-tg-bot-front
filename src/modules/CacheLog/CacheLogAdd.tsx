@@ -5,15 +5,11 @@ import { CacheLogAddEditForm } from 'src/modules/CacheLog/CacheLogAddEditForm';
 import {
   useCacheLogStore,
   setCacheLogStore,
-} from 'src/modules/CacheLog/cacheLog.store';
-import { TSelectContractor } from './cacheLog_ctrl';
-import {SelectFieldI} from 'src/types';
+} from 'src/store/cacheLog.store';
 
 export const CacheLogAdd = (props: {
   projectId: number;
-  contractorForm?: (props: {
-    onSelectContractor?: TSelectContractor;
-  }) => React.ReactNode;
+  contractorForm?: React.ReactNode;
 }) => {
   const cacheLogStore = useCacheLogStore();
 
@@ -24,25 +20,13 @@ export const CacheLogAdd = (props: {
 
   const cacheLogData: Partial<CacheLogI> = {
     ...cacheLogStore.info.data,
+    id: props.projectId,
   };
-  const getContractorForm = () => {
-    const onSelectContractor = (contractor: SelectFieldI) => {
-      if (cacheLogStore.info.data) {
-        cacheLogStore.info.data.contractor_id = contractor.id;
-        setCacheLogStore({ ...cacheLogStore });
-      }
-    };
-    if (props.contractorForm) {
-      return <>{props.contractorForm({ onSelectContractor })}</>;
-    }
-    return <></>;
-  };
-
   return (
     <Group description="">
       <CacheLogAddEditForm
         cacheLog={cacheLogData}
-        contractorForm={getContractorForm()}
+        contractorForm={props.contractorForm}
       />
     </Group>
   );

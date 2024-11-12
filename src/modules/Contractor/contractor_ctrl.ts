@@ -1,28 +1,20 @@
 import { RouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import {
-  ContractorStoreI,
-  setContractorStore,
-  defaultState as contractorStoreDefaultState,
-} from './contractor.store';
+import { Result } from 'src/system/error_sys';
+import { Store } from 'src/store/store';
 import {
   addContractor,
   updateContractor,
   infoContractor,
-  ContractorI,
-  getContractorList
+  getContractorList,
 } from 'src/api/contractor_api';
+import { ContractorI } from 'src/Entity/ContractorE';
 import { delay } from 'src/utils';
 
 export class ContractorCtrl {
   private isInit = false;
-  contractorStore: ContractorStoreI;
-  setContractorStore: (payload: ContractorStoreI) => void;
   routeNavigator: RouteNavigator;
 
   private constructor() {
-    this.contractorStore = { ...contractorStoreDefaultState };
-    // eslint-disable-next-line
-    this.setContractorStore = (payload: ContractorStoreI) => {};
     let a: any = 0;
     this.routeNavigator = a;
   }
@@ -31,13 +23,9 @@ export class ContractorCtrl {
 
   public static init(
     routeNavigator: RouteNavigator,
-    store: ContractorStoreI,
-    setContractorStore: (payload: ContractorStoreI) => void
   ) {
     const ctrl = ContractorCtrl.getInstance();
-    ctrl.contractorStore = store;
     ctrl.routeNavigator = routeNavigator;
-    ctrl.setContractorStore = setContractorStore;
     ctrl.isInit = true;
   }
 
@@ -52,9 +40,9 @@ export class ContractorCtrl {
     if (!this.isInit) {
       return;
     }
-    this.contractorStore.add = await addContractor(contractor);
-    setContractorStore({ ...this.contractorStore });
-    if (!this.contractorStore.add.error) {
+    Store.getInstance().contractorStore.add = await addContractor(contractor);
+    Store.getInstance().setContractorStore({ ...Store.getInstance().contractorStore });
+    if (!Store.getInstance().contractorStore.add.error) {
       this.routeNavigator.back();
     }
   }
@@ -63,9 +51,9 @@ export class ContractorCtrl {
     if (!this.isInit) {
       return;
     }
-    this.contractorStore.update = await updateContractor(contractor);
-    setContractorStore({ ...this.contractorStore });
-    if (!this.contractorStore.update.error) {
+    Store.getInstance().contractorStore.update = await updateContractor(contractor);
+    Store.getInstance().setContractorStore({ ...Store.getInstance().contractorStore });
+    if (!Store.getInstance().contractorStore.update.error) {
       this.routeNavigator.back();
     }
   }
@@ -74,11 +62,11 @@ export class ContractorCtrl {
     if (!this.isInit) {
       return;
     }
-    this.contractorStore.info = { data: {} };
-    setContractorStore({ ...this.contractorStore });
+    Store.getInstance().contractorStore.info = { data: {} };
+    Store.getInstance().setContractorStore({ ...Store.getInstance().contractorStore });
     await delay();
-    this.contractorStore.info = await infoContractor(contractorId);
-    setContractorStore({ ...this.contractorStore });
+    Store.getInstance().contractorStore.info = await infoContractor(contractorId);
+    Store.getInstance().setContractorStore({ ...Store.getInstance().contractorStore });
   }
 
   goBack() {
@@ -121,8 +109,39 @@ export class ContractorCtrl {
     if (!this.isInit) {
       return;
     }
-      this.contractorStore.list = await getContractorList();
-      this.setContractorStore({ ...this.contractorStore });
-      return this.contractorStore;
+    Store.getInstance().contractorStore.list = await getContractorList();
+    Store.getInstance().setContractorStore({ ...Store.getInstance().contractorStore });
+    return Store.getInstance().contractorStore;
   }
+
+  onSubmit(e: React.SyntheticEvent, isUpdate?: boolean) {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      caption: { value: string };
+      description: { value: string };
+    };
+    if (isUpdate) {
+      this.updateContractor({
+        caption: target.caption.value,
+        description: target.caption.value,
+        id: 0,
+      });
+    } else {
+      this.addContractor({
+        caption: target.caption.value,
+        description: target.caption.value,
+        id: Store.getInstance().contractorStore.info.data?.id,
+      });
+    }
+  }
+
+  setInfo(item: Partial<ContractorI>) {
+    const info = Result.setData(item);
+    Store.getInstance().contractorStore.info = info;
+    Store.getInstance().setContractorStore({ ...Store.getInstance().contractorStore });
+  }
+
+  isSelected(id: number) {
+    return id === Store.getInstance().contractorStore.info.data?.id;
+  };
 }

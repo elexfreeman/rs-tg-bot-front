@@ -29,4 +29,11 @@ export class Result<T> implements ResultI<T> {
   hasError() {
     return Boolean(this.error);
   }
+
+  static setData<T>(data: T) {
+    const out: ResultI<T> = {
+      data: data,
+    }
+    return out;
+  }
 }

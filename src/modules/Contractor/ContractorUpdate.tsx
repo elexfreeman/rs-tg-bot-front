@@ -4,8 +4,8 @@ import {
 } from '@vkontakte/vkui';
 import { ContractorCtrl } from './contractor_ctrl';
 import { ContractorI } from 'src/api/contractor_api';
-import { ContractorAddEditForm } from './ContractorAddEditForm';
-import { useContractorStore } from 'src/modules/Contractor/contractor.store';
+import { ContractorAddEditForm } from 'src/modules/Contractor/ContractorAddEditForm';
+import { useContractorStore } from 'src/store/contractor.store';
 
 export const ContractorUpdate = (props: {contractorId: number}) => {
   const contractorStore = useContractorStore();

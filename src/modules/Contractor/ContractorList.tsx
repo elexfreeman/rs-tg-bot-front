@@ -7,7 +7,7 @@ import {
 } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
-import { useContractorStore } from 'src/modules/Contractor/contractor.store';
+import { useContractorStore } from 'src/store/contractor.store';
 
 export const ContractorList = () => {
   const contractorCtrl = ContractorCtrl.getInstance();

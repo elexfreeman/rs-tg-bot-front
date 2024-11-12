@@ -6,7 +6,7 @@ import { CacheLogAddEditForm } from './CacheLogAddEditForm';
 import {
   useCacheLogStore,
   setCacheLogStore,
-} from 'src/modules/CacheLog/cacheLog.store';
+} from 'src/store/cacheLog.store';
 
 export const CacheLogUpdate = (props: {
   projectId: number;

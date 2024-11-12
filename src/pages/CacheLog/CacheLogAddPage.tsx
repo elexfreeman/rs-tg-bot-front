@@ -1,4 +1,4 @@
-import { FC, memo, useState } from 'react';
+import { FC, memo, useEffect } from 'react';
 import {
   NavIdProps,
   Panel,
@@ -6,17 +6,16 @@ import {
   PanelHeaderBack,
   FormItem,
   SelectMimicry,
-  View,
   Group,
 } from '@vkontakte/vkui';
 import { CacheLogAdd } from 'src/modules/CacheLog/CacheLogAdd';
 import {
   CacheLogCtrl,
-  TSelectContractor,
 } from 'src/modules/CacheLog/cacheLog_ctrl';
-import { useParams } from '@vkontakte/vk-mini-apps-router';
+import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelect';
-import {SelectFieldI} from 'src/types';
+import { setModalStore } from 'src/modals/modal.store';
+import { Store } from 'src/store/store';
 
 enum PanelView {
   addPage = 'addPage',
@@ -26,68 +25,61 @@ enum PanelView {
 export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
   const cacheLogCtrl = CacheLogCtrl.getInstance();
   const params = useParams<'project_id'>();
-  const [activeView, setActiveView] = useState<PanelView>(PanelView.addPage);
-  const [selectedContractor, setSelectedContractor] = useState<SelectFieldI|undefined>();
+  const routeNavigator = useRouteNavigator();
 
-  let onSelectContractorClick: TSelectContractor | undefined;
+  const onSelect = () => {
+    routeNavigator.hideModal();
+  }
 
-  const onSelectContractorFromForm = (contractor: SelectFieldI) => {
-    if (onSelectContractorClick) {
-      setSelectedContractor(contractor)
-      // передача выбраного параметра во внутреннею форму
-      onSelectContractorClick(contractor);
-    }
-    setActiveView(PanelView.addPage);
+  useEffect(() => {
+    cacheLogCtrl.infoProject(Number(params?.project_id));
+  }, []);
+
+  const getContractorSelectorContent = () => {
+    return (
+      <Panel id={PanelView.contractorForm}>
+        <PanelHeader
+          before={
+            <PanelHeaderBack onClick={() => routeNavigator.hideModal()} />
+          }
+        >
+          Выбор контрагента
+        </PanelHeader>
+        <Group>
+          <ContractorListSelect onSelect={onSelect} />
+        </Group>
+      </Panel>
+    );
   };
 
-  const contractorForm = (props: {
-    onSelectContractor?: TSelectContractor;
-  }) => {
-    if (props.onSelectContractor) {
-      onSelectContractorClick = props?.onSelectContractor;
-    }
+  // элемент для выбора внутреннего значения
+  const contractorFormField = () => {
+    const onShowModal = () => {
+      setModalStore({ content: getContractorSelectorContent });
+      routeNavigator.showModal('main_modal');
+    };
     return (
       <FormItem top="Выберите контрагента">
-        <SelectMimicry
-          placeholder="Не выбрана"
-          onClick={() => setActiveView(PanelView.contractorForm)}
-        >
-          {selectedContractor?.caption}
+        <SelectMimicry placeholder="Не выбран" onClick={() => onShowModal()}>
+          {Store.getInstance().contractorStore.info.data?.caption}
         </SelectMimicry>
       </FormItem>
     );
   };
 
   return (
-    <View {...props} activePanel={activeView}>
-      <Panel id={PanelView.addPage} className="Panel__fullScreen">
-        <PanelHeader
-          delimiter="none"
-          before={<PanelHeaderBack onClick={() => cacheLogCtrl.goBack()} />}
-        >
-          Новый платеж
-        </PanelHeader>
-        <CacheLogAdd
-          projectId={Number(params?.project_id)}
-          contractorForm={contractorForm}
-        />
-      </Panel>
-      <Panel id={PanelView.contractorForm}>
-        <PanelHeader
-          before={
-            <PanelHeaderBack onClick={() => setActiveView(PanelView.addPage)} />
-          }
-        >
-          Выбор контрагента
-        </PanelHeader>
-        <Group>
-          <ContractorListSelect
-            selected={selectedContractor}
-            onSelectContractor={onSelectContractorFromForm}
-          />
-        </Group>
-      </Panel>
-    </View>
+    <Panel {...props} className="Panel__fullScreen">
+      <PanelHeader
+        delimiter="none"
+        before={<PanelHeaderBack onClick={() => cacheLogCtrl.goBack()} />}
+      >
+        Новый платеж
+      </PanelHeader>
+      <CacheLogAdd
+        projectId={Number(params?.project_id)}
+        contractorForm={contractorFormField()}
+      />
+    </Panel>
   );
 });
 

@@ -2,10 +2,10 @@ import {  useEffect } from 'react';
 import {
   Group,
 } from '@vkontakte/vkui';
-import { ProjectCtrl } from './project_ctrl';
+import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
 import { ProjectI } from 'src/api/project_api';
-import { ProjectAddEditForm } from './ProjectAddEditForm';
-import { useProjectStore } from 'src/modules/Project/project.store';
+import { ProjectAddEditForm } from 'src/modules/Project/ProjectAddEditForm';
+import { useProjectStore } from 'src/store/project.store';
 
 export const ProjectUpdate = (props: {projectId: number}) => {
   const projectStore = useProjectStore();

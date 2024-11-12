@@ -1,43 +1,28 @@
 import { RouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import {
-  ProjectStoreI,
-  setProjectStore,
-  defaultState as projectStoreDefaultState,
-} from './project.store';
+import { Store } from 'src/store/store';
 import {
   addProject,
   updateProject,
   infoProject,
-  ProjectI,
-  getProjectList
+  getProjectList,
 } from 'src/api/project_api';
 import { delay } from 'src/utils';
+import { ProjectI } from 'src/Entity/ProjectE';
 
 export class ProjectCtrl {
   private isInit = false;
-  projectStore: ProjectStoreI;
-  setProjectStore: (payload: ProjectStoreI) => void;
   routeNavigator: RouteNavigator;
 
   private constructor() {
-    this.projectStore = { ...projectStoreDefaultState };
-    // eslint-disable-next-line
-    this.setProjectStore = (payload: ProjectStoreI) => {};
     let a: any = 0;
     this.routeNavigator = a;
   }
 
   private static instance: ProjectCtrl;
 
-  public static init(
-    routeNavigator: RouteNavigator,
-    store: ProjectStoreI,
-    setProjectStore: (payload: ProjectStoreI) => void
-  ) {
+  public static init(routeNavigator: RouteNavigator) {
     const ctrl = ProjectCtrl.getInstance();
-    ctrl.projectStore = store;
     ctrl.routeNavigator = routeNavigator;
-    ctrl.setProjectStore = setProjectStore;
     ctrl.isInit = true;
   }
 
@@ -52,9 +37,9 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-    this.projectStore.add = await addProject(project);
-    setProjectStore({ ...this.projectStore });
-    if (!this.projectStore.add.error) {
+    Store.getInstance().projectStore.add = await addProject(project);
+    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
+    if (!Store.getInstance().projectStore.add.error) {
       this.routeNavigator.back();
     }
   }
@@ -63,9 +48,9 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-    this.projectStore.update = await updateProject(project);
-    setProjectStore({ ...this.projectStore });
-    if (!this.projectStore.update.error) {
+    Store.getInstance().projectStore.update = await updateProject(project);
+    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
+    if (!Store.getInstance().projectStore.update.error) {
       this.routeNavigator.back();
     }
   }
@@ -74,11 +59,11 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-    this.projectStore.info = { data: {} };
-    setProjectStore({ ...this.projectStore });
+    Store.getInstance().projectStore.info = { data: {} };
+    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
     await delay();
-    this.projectStore.info = await infoProject(projectId);
-    setProjectStore({ ...this.projectStore });
+    Store.getInstance().projectStore.info = await infoProject(projectId);
+    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
   }
 
   goBack() {
@@ -120,8 +105,8 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-      this.projectStore.list = await getProjectList();
-      this.setProjectStore({ ...this.projectStore });
-      return this.projectStore;
+    Store.getInstance().projectStore.list = await getProjectList();
+    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
+    return Store.getInstance().projectStore;
   }
 }
