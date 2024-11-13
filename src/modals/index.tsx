@@ -9,7 +9,6 @@ import { Icon24Dismiss } from '@vkontakte/icons';
 
 const Modals: React.FC = () => {
   const { modal } = useActiveVkuiLocation();
-  // routeNavigator.showModal('filter')
   const routeNavigator = useRouteNavigator();
   const modalStore = useModalStore();
   console.log(modalStore.content && modalStore.content())
@@ -19,8 +18,9 @@ const Modals: React.FC = () => {
     // activeModal - текущая открытая модальная страница | undefind
     <ModalRoot activeModal={modal}>
       <ModalPage
+        preventClose
+        settlingHeight={100}
         id="main_modal"
-        dynamicContentHeight
         header={
           <ModalPageHeader
             after={
