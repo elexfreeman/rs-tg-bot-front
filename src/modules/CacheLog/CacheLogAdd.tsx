@@ -1,34 +1,34 @@
 import { useEffect } from 'react';
 import { Group } from '@vkontakte/vkui';
-import { getCacheLogDefault, CacheLogI } from 'src/api/cacheLog_api';
-import { CacheLogAddEditForm } from 'src/modules/CacheLog/CacheLogAddEditForm';
+import { getCacheLogItemDefault, CacheLogItemI } from 'src/api/cacheLogItem_api';
+import { CacheLogItemAddEditForm } from 'src/modules/CacheLogItem/CacheLogItemAddEditForm';
 import {
-  useCacheLogStore,
-  setCacheLogStore,
-} from 'src/store/cacheLog.store';
+  useCacheLogItemStore,
+  setCacheLogItemStore,
+} from 'src/store/cacheLogItem.store';
 
-export const CacheLogAdd = (props: {
+export const CacheLogItemAdd = (props: {
   projectId: number;
   contractorForm?: React.ReactNode;
 }) => {
-  const cacheLogStore = useCacheLogStore();
+  const cacheLogItemStore = useCacheLogItemStore();
 
   useEffect(() => {
-    cacheLogStore.info.data = getCacheLogDefault();
-    setCacheLogStore({ ...cacheLogStore });
+    cacheLogItemStore.info.data = getCacheLogItemDefault();
+    setCacheLogItemStore({ ...cacheLogItemStore });
   }, []);
 
-  const cacheLogData: Partial<CacheLogI> = {
-    ...cacheLogStore.info.data,
+  const cacheLogItemData: Partial<CacheLogItemI> = {
+    ...cacheLogItemStore.info.data,
   };
   return (
     <Group description="">
-      <CacheLogAddEditForm
-        cacheLog={cacheLogData}
+      <CacheLogItemAddEditForm
+        cacheLogItem={cacheLogItemData}
         contractorForm={props.contractorForm}
       />
     </Group>
   );
 };
 
-CacheLogAdd.displayName = 'CacheLogAdd';
+CacheLogItemAdd.displayName = 'CacheLogItemAdd';
