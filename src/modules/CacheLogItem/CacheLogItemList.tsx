@@ -1,30 +1,30 @@
 import { useEffect } from 'react';
 import { Group, CellButton, Header, Separator } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
-import { CacheLogCtrl } from './cacheLogItem_ctrl';
-import { useCacheLogStore } from 'src/store/cacheLog.store';
+import { CacheLogItemCtrl } from 'src/modules/CacheLogItem/cacheLogItem_ctrl';
+import { useCacheLogItemStore } from 'src/store/cacheLogItem.store';
 
-export const CacheLogList = (props: { projectId: number }) => {
-  const cacheLogCtrl = CacheLogCtrl.getInstance();
-  const cacheLogStore = useCacheLogStore();
+export const CacheLogItemList = (props: { projectId: number }) => {
+  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
+  const cacheLogItemStore = useCacheLogItemStore();
 
   useEffect(() => {
-    cacheLogCtrl.cacheLogList(props.projectId);
+    cacheLogItemCtrl.cacheLogItemList(props.projectId);
   }, []);
 
   return (
     <Group mode="plain" header={<Header mode="secondary">Платежи</Header>}>
       <CellButton
-        onClick={() => cacheLogCtrl.goToAddCacheLog(props.projectId)}
+        onClick={() => cacheLogItemCtrl.goToAddCacheLogItem(props.projectId)}
         before={<Icon28AddOutline />}
       >
         Добавить платеж
       </CellButton>
-      {cacheLogStore?.list?.data?.map((item) => (
+      {cacheLogItemStore?.list?.data?.map((item) => (
         <>
           <div
             className="table-cache"
-            onClick={() => cacheLogCtrl.goToUpdateCacheLog(props.projectId, item.id)}
+            onClick={() => cacheLogItemCtrl.goToUpdateCacheLogItem(props.projectId, item.id)}
           >
             <div className="table-cache-item">
               <div className="table-cache-item__date">
@@ -45,4 +45,4 @@ export const CacheLogList = (props: { projectId: number }) => {
   );
 };
 
-CacheLogList.displayName = 'CacheLog';
+CacheLogItemList.displayName = 'CacheLogItem';

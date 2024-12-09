@@ -1,19 +1,17 @@
 import { RouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Store } from 'src/store/store';
 import {
-  getCacheLogList,
-  addCacheLog,
-  updateCacheLog,
-  infoCacheLog,
-} from 'src/api/cacheLog_api';
-import { delay } from 'src/utils';
+  getCacheLogItemList,
+  addCacheLogItem,
+  updateCacheLogItem,
+} from 'src/api/cacheLogItem_api';
 import { getLang } from 'src/lang/lang';
 import { SelectFieldI } from 'src/types';
-import { CacheLogI } from 'src/Entity/CacheLogE';
+import { CacheLogItemI } from 'src/Entity/CacheLogItemE';
 
 export type TSelectContractor = (contractor: SelectFieldI) => void;
 
-export class CacheLogCtrl {
+export class CacheLogItemCtrl {
   private isInit = false;
 
   routeNavigator: RouteNavigator;
@@ -23,67 +21,49 @@ export class CacheLogCtrl {
     this.routeNavigator = a;
   }
 
-  private static instance: CacheLogCtrl;
+  private static instance: CacheLogItemCtrl;
 
   public static init(routeNavigator: RouteNavigator) {
-    const ctrl = CacheLogCtrl.getInstance();
+    const ctrl = CacheLogItemCtrl.getInstance();
     ctrl.routeNavigator = routeNavigator;
     ctrl.isInit = true;
   }
 
-  public static getInstance(): CacheLogCtrl {
-    if (!CacheLogCtrl.instance) {
-      CacheLogCtrl.instance = new CacheLogCtrl();
+  public static getInstance(): CacheLogItemCtrl {
+    if (!CacheLogItemCtrl.instance) {
+      CacheLogItemCtrl.instance = new CacheLogItemCtrl();
     }
-    return CacheLogCtrl.instance;
+    return CacheLogItemCtrl.instance;
   }
 
   async getLang() {
     return getLang();
   }
 
-  async addCacheLog(cacheLog: Partial<CacheLogI>) {
+  async addCacheLogItem(cacheLogItem: Partial<CacheLogItemI>) {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogStore.add = await addCacheLog(cacheLog);
-    Store.getInstance().setCacheLogStore({
-      ...Store.getInstance().cacheLogStore,
+    Store.getInstance().cacheLogItemStore.add = await addCacheLogItem(cacheLogItem);
+    Store.getInstance().setCacheLogItemStore({
+      ...Store.getInstance().cacheLogItemStore,
     });
-    if (!Store.getInstance().cacheLogStore.add.error) {
+    if (!Store.getInstance().cacheLogItemStore.add.error) {
       this.routeNavigator.back();
     }
   }
 
-  async updateCacheLog(cacheLog: Partial<CacheLogI>) {
+  async updateCacheLogItem(cacheLogItem: Partial<CacheLogItemI>) {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogStore.update = await updateCacheLog(cacheLog);
-    Store.getInstance().setCacheLogStore({
-      ...Store.getInstance().cacheLogStore,
+    Store.getInstance().cacheLogItemStore.update = await updateCacheLogItem(cacheLogItem);
+    Store.getInstance().setCacheLogItemStore({
+      ...Store.getInstance().cacheLogItemStore,
     });
-    if (!Store.getInstance().cacheLogStore.update.error) {
+    if (!Store.getInstance().cacheLogItemStore.update.error) {
       this.routeNavigator.back();
     }
-  }
-
-  async infoCacheLog(cacheLogId: number, projectId: number) {
-    if (!this.isInit) {
-      return;
-    }
-    Store.getInstance().cacheLogStore.info = { data: {} };
-    Store.getInstance().setCacheLogStore({
-      ...Store.getInstance().cacheLogStore,
-    });
-    await delay();
-    Store.getInstance().cacheLogStore.info = await infoCacheLog(
-      cacheLogId,
-      projectId
-    );
-    Store.getInstance().setCacheLogStore({
-      ...Store.getInstance().cacheLogStore,
-    });
   }
 
   goBack() {
@@ -93,30 +73,30 @@ export class CacheLogCtrl {
     this.routeNavigator.back();
   }
 
-  async cacheLogList(projectId: number) {
+  async cacheLogItemList(projectId: number) {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogStore.list = await getCacheLogList(projectId);
-    Store.getInstance().setCacheLogStore({
-      ...Store.getInstance().cacheLogStore,
+    Store.getInstance().cacheLogItemStore.list = await getCacheLogItemList(projectId);
+    Store.getInstance().setCacheLogItemStore({
+      ...Store.getInstance().cacheLogItemStore,
     });
-    return Store.getInstance().cacheLogStore;
+    return Store.getInstance().cacheLogItemStore;
   }
 
-  goToAddCacheLog(projectId: number) {
+  goToAddCacheLogItem(projectId: number) {
     if (!this.isInit) {
       return;
     }
-    this.routeNavigator.push(`/ProjectInfo/${projectId}/CacheLogAdd`);
+    this.routeNavigator.push(`/ProjectInfo/${projectId}/CacheLogItemAdd`);
   }
 
-  goToUpdateCacheLog(projectId?: number, cacheLogId?: number) {
+  goToUpdateCacheLogItem(projectId?: number, cacheLogItemId?: number) {
     if (!this.isInit) {
       return;
     }
     this.routeNavigator.push(
-      `/ProjectInfo/${projectId}/CacheLogUpdate/${cacheLogId}`
+      `/ProjectInfo/${projectId}/CacheLogItemUpdate/${cacheLogItemId}`
     );
   }
 
@@ -127,7 +107,7 @@ export class CacheLogCtrl {
       description: { value: string };
     };
     if (isUpdate) {
-      this.updateCacheLog({
+      this.updateCacheLogItem({
         caption: target.caption.value,
         description: target.caption.value,
         project_id: Store.getInstance().projectStore.info.data?.id,
@@ -135,7 +115,7 @@ export class CacheLogCtrl {
         id: Store.getInstance().contractorStore.info.data?.id,
       });
     } else {
-      this.addCacheLog({
+      this.addCacheLogItem({
         caption: target.caption.value,
         description: target.caption.value,
         project_id: Store.getInstance().projectStore.info.data?.id,

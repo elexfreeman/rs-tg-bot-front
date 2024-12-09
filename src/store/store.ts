@@ -13,6 +13,11 @@ import {
   defaultState as cacheLogStoreDefaultState,
 } from 'src/store/cacheLog.store';
 
+import {
+  CacheLogItemStoreI,
+  defaultState as cacheLogItemStoreDefaultState,
+} from 'src/store/cacheLogItem.store';
+
 export class Store {
   private static instance: Store;
 
@@ -24,6 +29,9 @@ export class Store {
 
   cacheLogStore: CacheLogStoreI;
   setCacheLogStore: (payload: CacheLogStoreI) => void;
+
+  cacheLogItemStore: CacheLogItemStoreI;
+  setCacheLogItemStore: (payload: CacheLogItemStoreI) => void;
 
   private constructor() {
     this.projectStore = { ...projectStoreDefaultState };
@@ -37,6 +45,10 @@ export class Store {
     this.cacheLogStore = { ...cacheLogStoreDefaultState };
     // eslint-disable-next-line
     this.setCacheLogStore = (payload: CacheLogStoreI) => {};
+
+    this.cacheLogItemStore = { ...cacheLogItemStoreDefaultState };
+    // eslint-disable-next-line
+    this.setCacheLogItemStore = (payload: CacheLogItemStoreI) => {};
   }
 
   public static getInstance(): Store {
@@ -61,6 +73,12 @@ export class Store {
   initCacheLogStore(store: CacheLogStoreI, setStore: (payload: CacheLogStoreI) => void): Store {
     this.cacheLogStore = store;
     this.setCacheLogStore = setStore;
+    return this;
+  }
+
+  initCacheLogItemStore(store: CacheLogItemStoreI, setStore: (payload: CacheLogItemStoreI) => void): Store {
+    this.cacheLogItemStore = store;
+    this.setCacheLogItemStore = setStore;
     return this;
   }
 }

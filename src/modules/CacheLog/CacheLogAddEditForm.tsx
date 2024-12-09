@@ -5,30 +5,30 @@ import {
   Textarea,
   Button,
 } from '@vkontakte/vkui';
-import { CacheLogItemCtrl } from './cacheLogItem_ctrl';
-import { CacheLogItemI } from 'src/api/cacheLogItem_api';
+import { CacheLogCtrl } from './cacheLogItem_ctrl';
+import { CacheLogI } from 'src/api/cacheLog_api';
 import { Store } from 'src/store/store';
 
-export const CacheLogItemAddEditForm = (props: {
-  cacheLogItem?: Partial<CacheLogItemI>;
+export const CacheLogAddEditForm = (props: {
+  cacheLog?: Partial<CacheLogI>;
   isUpdate?: boolean;
   contractorForm: React.ReactNode;
 }) => {
-  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
+  const cacheLogCtrl = CacheLogCtrl.getInstance();
 
   return (
-    <form onSubmit={(e) => cacheLogItemCtrl.onSubmit(e, props.isUpdate)}>
+    <form onSubmit={(e) => cacheLogCtrl.onSubmit(e, props.isUpdate)}>
       <FormLayoutGroup>
         <FormItem htmlFor="caption" top="Название">
           <Input
             id="caption"
-            defaultValue={Store.getInstance().cacheLogItemStore.info.data?.caption}
+            defaultValue={Store.getInstance().cacheLogStore.info.data?.caption}
           />
         </FormItem>
         <FormItem top="Описание">
           <Textarea
             placeholder="Описание проекта..."
-            defaultValue={Store.getInstance().cacheLogItemStore.info.data?.description}
+            defaultValue={Store.getInstance().cacheLogStore.info.data?.description}
           />
         </FormItem>
         {props.contractorForm && props.contractorForm}
