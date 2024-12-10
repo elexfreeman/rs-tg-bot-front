@@ -9,6 +9,7 @@ export interface CacheLogItemStoreI {
   add: ResultI<{id: number}>;
   update: ResultI<{id: number}>;
   info: ResultI<Partial<CacheLogItemI>>;
+  getData: () => CacheLogItemStoreI;
 }
 
 export const state: CacheLogItemStoreI = {
@@ -17,6 +18,9 @@ export const state: CacheLogItemStoreI = {
   add: {},
   update: {},
   info: {},
+  getData: () => {
+    return state
+  }
 };
 
 export const defaultState = {...state};

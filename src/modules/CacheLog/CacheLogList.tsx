@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Group, CellButton, Header, Separator } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
-import { CacheLogCtrl } from './cacheLogItem_ctrl';
+import { CacheLogCtrl } from './cacheLog_ctrl';
 import { useCacheLogStore } from 'src/store/cacheLog.store';
 
 export const CacheLogList = (props: { projectId: number }) => {

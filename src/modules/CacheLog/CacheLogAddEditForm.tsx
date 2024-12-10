@@ -5,7 +5,7 @@ import {
   Textarea,
   Button,
 } from '@vkontakte/vkui';
-import { CacheLogCtrl } from './cacheLogItem_ctrl';
+import { CacheLogCtrl } from './cacheLog_ctrl';
 import { CacheLogI } from 'src/api/cacheLog_api';
 import { Store } from 'src/store/store';
 

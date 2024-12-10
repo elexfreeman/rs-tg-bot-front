@@ -109,17 +109,11 @@ export class CacheLogItemCtrl {
     if (isUpdate) {
       this.updateCacheLogItem({
         caption: target.caption.value,
-        description: target.caption.value,
-        project_id: Store.getInstance().projectStore.info.data?.id,
-        contractor_id: Store.getInstance().contractorStore.info.data?.id,
         id: Store.getInstance().contractorStore.info.data?.id,
       });
     } else {
       this.addCacheLogItem({
         caption: target.caption.value,
-        description: target.caption.value,
-        project_id: Store.getInstance().projectStore.info.data?.id,
-        contractor_id: Store.getInstance().contractorStore.info.data?.id,
       });
     }
   }

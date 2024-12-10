@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Group } from '@vkontakte/vkui';
-import { CacheLogCtrl } from './cacheLogItem_ctrl';
+import { CacheLogCtrl } from './cacheLog_ctrl';
 import { CacheLogI } from 'src/api/cacheLog_api';
 import { CacheLogAddEditForm } from './CacheLogAddEditForm';
 import { useCacheLogStore } from 'src/store/cacheLog.store';

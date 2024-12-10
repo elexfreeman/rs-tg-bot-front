@@ -117,19 +117,20 @@ export class ContractorCtrl {
   onSubmit(e: React.SyntheticEvent, isUpdate?: boolean) {
     e.preventDefault();
     const target = e.target as typeof e.target & {
+      itemId: { value: number };
       caption: { value: string };
       description: { value: string };
     };
     if (isUpdate) {
       this.updateContractor({
         caption: target.caption.value,
-        description: target.caption.value,
-        id: 0,
+        description: target.description.value,
+        id: Number(target.itemId.value),
       });
     } else {
       this.addContractor({
         caption: target.caption.value,
-        description: target.caption.value,
+        description: target.description.value,
         id: Store.getInstance().contractorStore.info.data?.id,
       });
     }

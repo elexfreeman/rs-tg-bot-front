@@ -9,6 +9,7 @@ export interface ContractorStoreI {
   add: ResultI<{id: number}>;
   update: ResultI<{id: number}>;
   info: ResultI<Partial<ContractorI>>;
+  getData: () => ContractorStoreI;
 }
 
 export const state: ContractorStoreI = {
@@ -17,6 +18,7 @@ export const state: ContractorStoreI = {
   add: {},
   update: {},
   info: {},
+  getData: () => state,
 };
 
 export const defaultState = {...state};

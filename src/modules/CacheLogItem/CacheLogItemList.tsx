@@ -31,7 +31,7 @@ export const CacheLogItemList = (props: { projectId: number }) => {
                 <div className="table-cache-item__dot">
                   <div className="color-dot"></div>
                 </div>
-                <div>{item.created_at}</div>
+                <div>{item.caption}</div>
               </div>
               <div className="table-cache-item__summa">240 000</div>
             </div>

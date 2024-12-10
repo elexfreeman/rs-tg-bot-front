@@ -26,10 +26,6 @@ export const CacheLogItemAddEditForm = (props: {
           />
         </FormItem>
         <FormItem top="Описание">
-          <Textarea
-            placeholder="Описание проекта..."
-            defaultValue={Store.getInstance().cacheLogItemStore.info.data?.description}
-          />
         </FormItem>
         {props.contractorForm && props.contractorForm}
         <FormItem>

@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Group } from '@vkontakte/vkui';
-import { CacheLogItemCtrl } from './cacheLogItem_ctrl';
-import { CacheLogItemI } from 'src/api/cacheLogItem_api';
+import { CacheLogItemI } from 'src/Entity/CacheLogItemE';
 import { CacheLogItemAddEditForm } from './CacheLogItemAddEditForm';
 import { useCacheLogItemStore } from 'src/store/cacheLogItem.store';
+// import { CacheLogItemCtrl } from './cacheLogItem_ctrl';
 
 export const CacheLogItemUpdate = (props: {
   projectId: number;
@@ -11,10 +11,10 @@ export const CacheLogItemUpdate = (props: {
   contractorForm?: React.ReactNode;
 }) => {
   const cacheLogItemStore = useCacheLogItemStore();
-  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
+//  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
 
   useEffect(() => {
-    cacheLogItemCtrl.infoCacheLogItem(props.cacheLogItemId, props.projectId);
+//    cacheLogItemCtrl.infoCacheLogItem(props.cacheLogItemId, props.projectId);
   }, []);
 
   const cacheLogItemData: Partial<CacheLogItemI> = {
