@@ -8,15 +8,13 @@ import {
   setCacheLogItemStore,
 } from 'src/store/cacheLogItem.store';
 
-export const CacheLogItemAdd = (props: {
-  projectId: number;
-  contractorForm?: React.ReactNode;
-}) => {
+export const CacheLogItemAdd = (props: { projectId: number; }) => {
   const cacheLogItemStore = useCacheLogItemStore();
 
   useEffect(() => {
     cacheLogItemStore.info.data = getCacheLogItemDefault();
     setCacheLogItemStore({ ...cacheLogItemStore });
+    console.log(props)
   }, []);
 
   const cacheLogItemData: Partial<CacheLogItemI> = {
@@ -26,7 +24,6 @@ export const CacheLogItemAdd = (props: {
     <Group description="">
       <CacheLogItemAddEditForm
         cacheLogItem={cacheLogItemData}
-        contractorForm={props.contractorForm}
       />
     </Group>
   );

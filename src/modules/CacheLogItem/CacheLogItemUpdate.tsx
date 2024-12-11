@@ -8,13 +8,13 @@ import { useCacheLogItemStore } from 'src/store/cacheLogItem.store';
 export const CacheLogItemUpdate = (props: {
   projectId: number;
   cacheLogItemId: number;
-  contractorForm?: React.ReactNode;
 }) => {
   const cacheLogItemStore = useCacheLogItemStore();
-//  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
+  //  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
 
   useEffect(() => {
-//    cacheLogItemCtrl.infoCacheLogItem(props.cacheLogItemId, props.projectId);
+    //    cacheLogItemCtrl.infoCacheLogItem(props.cacheLogItemId, props.projectId);
+    console.log(props);
   }, []);
 
   const cacheLogItemData: Partial<CacheLogItemI> = {
@@ -23,11 +23,7 @@ export const CacheLogItemUpdate = (props: {
 
   return (
     <Group description="">
-      <CacheLogItemAddEditForm
-        cacheLogItem={cacheLogItemData}
-        isUpdate
-        contractorForm={props.contractorForm}
-      />
+      <CacheLogItemAddEditForm cacheLogItem={cacheLogItemData} isUpdate />
     </Group>
   );
 };

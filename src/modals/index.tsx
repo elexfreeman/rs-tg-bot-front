@@ -11,7 +11,6 @@ const Modals: React.FC = () => {
   const { modal } = useActiveVkuiLocation();
   const routeNavigator = useRouteNavigator();
   const modalStore = useModalStore();
-  console.log(modalStore.content && modalStore.content())
 
   return (
     // ModalRoot - контейнер для модальных страниц и карточек

@@ -120,24 +120,17 @@ export class CacheLogCtrl {
     );
   }
 
-  onSubmit(e: React.SyntheticEvent, isUpdate?: boolean) {
-    e.preventDefault();
-    const target = e.target as typeof e.target & {
-      caption: { value: string };
-      description: { value: string };
-    };
+  async onSubmit(isUpdate?: boolean) {
+    await delay();
     if (isUpdate) {
       this.updateCacheLog({
-        caption: target.caption.value,
-        description: target.caption.value,
+        ...Store.getInstance().cacheLogStore.info.data,
         project_id: Store.getInstance().projectStore.info.data?.id,
         contractor_id: Store.getInstance().contractorStore.info.data?.id,
-        id: Store.getInstance().contractorStore.info.data?.id,
       });
     } else {
       this.addCacheLog({
-        caption: target.caption.value,
-        description: target.caption.value,
+        ...Store.getInstance().cacheLogStore.info.data,
         project_id: Store.getInstance().projectStore.info.data?.id,
         contractor_id: Store.getInstance().contractorStore.info.data?.id,
       });

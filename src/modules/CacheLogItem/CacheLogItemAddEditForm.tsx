@@ -1,10 +1,4 @@
-import {
-  FormLayoutGroup,
-  FormItem,
-  Input,
-  Textarea,
-  Button,
-} from '@vkontakte/vkui';
+import { FormLayoutGroup, FormItem, Input, Button } from '@vkontakte/vkui';
 import { CacheLogItemCtrl } from './cacheLogItem_ctrl';
 import { CacheLogItemI } from 'src/Entity/CacheLogItemE';
 import { Store } from 'src/store/store';
@@ -12,7 +6,6 @@ import { Store } from 'src/store/store';
 export const CacheLogItemAddEditForm = (props: {
   cacheLogItem?: Partial<CacheLogItemI>;
   isUpdate?: boolean;
-  contractorForm: React.ReactNode;
 }) => {
   const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
 
@@ -22,12 +15,29 @@ export const CacheLogItemAddEditForm = (props: {
         <FormItem htmlFor="caption" top="Название">
           <Input
             id="caption"
-            defaultValue={Store.getInstance().cacheLogItemStore.info.data?.caption}
+            defaultValue={
+              Store.getInstance().cacheLogItemStore.info.data?.caption
+            }
           />
         </FormItem>
-        <FormItem top="Описание">
+        <FormItem htmlFor="price" top="Цена">
+          <Input
+            id="price"
+            key={Store.getInstance().cacheLogItemStore.info.data?.price}
+            defaultValue={
+              Store.getInstance().cacheLogItemStore.info.data?.price
+            }
+          />
         </FormItem>
-        {props.contractorForm && props.contractorForm}
+        <FormItem htmlFor="count" top="Количество">
+          <Input
+            id="count"
+            key={Store.getInstance().cacheLogItemStore.info.data?.count}
+            defaultValue={
+              Store.getInstance().cacheLogItemStore.info.data?.count
+            }
+          />
+        </FormItem>
         <FormItem>
           <Button type="submit">Сохранить</Button>
         </FormItem>
