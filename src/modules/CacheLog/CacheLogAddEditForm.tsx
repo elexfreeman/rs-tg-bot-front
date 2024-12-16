@@ -16,6 +16,7 @@ export const CacheLogAddEditForm = (props: {
   cacheLog?: Partial<CacheLogI>;
   isUpdate?: boolean;
   contractorForm: React.ReactNode;
+  cacheLogItemListForm: React.ReactNode;
 }) => {
   const cacheLogCtrl = CacheLogCtrl.getInstance();
   const cacheLogStore = useCacheLogStore();
@@ -32,7 +33,7 @@ export const CacheLogAddEditForm = (props: {
   };
 
   const onSave = () => {
-    const info = Result.setData({...updateData});
+    const info = Result.setData({ ...updateData });
     setCacheLogStore({ ...cacheLogStore, info });
     cacheLogCtrl.onSubmit(props.isUpdate);
   };
@@ -58,6 +59,7 @@ export const CacheLogAddEditForm = (props: {
         />
       </FormItem>
       {props.contractorForm && props.contractorForm}
+      {props.cacheLogItemListForm && props.cacheLogItemListForm}
       <FormItem>
         <Button onClick={() => onSave()}>Сохранить</Button>
       </FormItem>

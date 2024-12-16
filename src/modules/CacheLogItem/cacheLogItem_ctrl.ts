@@ -44,7 +44,9 @@ export class CacheLogItemCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogItemStore.add = await addCacheLogItem(cacheLogItem);
+    Store.getInstance().cacheLogItemStore.add = await addCacheLogItem(
+      cacheLogItem
+    );
     Store.getInstance().setCacheLogItemStore({
       ...Store.getInstance().cacheLogItemStore,
     });
@@ -57,7 +59,9 @@ export class CacheLogItemCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogItemStore.update = await updateCacheLogItem(cacheLogItem);
+    Store.getInstance().cacheLogItemStore.update = await updateCacheLogItem(
+      cacheLogItem
+    );
     Store.getInstance().setCacheLogItemStore({
       ...Store.getInstance().cacheLogItemStore,
     });
@@ -73,15 +77,16 @@ export class CacheLogItemCtrl {
     this.routeNavigator.back();
   }
 
-  async cacheLogItemList(projectId: number) {
+  async cacheLogItemList(cacheLogId: number) {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogItemStore.list = await getCacheLogItemList(projectId);
+    const out = await getCacheLogItemList(cacheLogId);
+    Store.getInstance().cacheLogItemStore.list = out;
     Store.getInstance().setCacheLogItemStore({
       ...Store.getInstance().cacheLogItemStore,
     });
-    return Store.getInstance().cacheLogItemStore;
+    return out;
   }
 
   goToAddCacheLogItem(projectId: number) {

@@ -9,6 +9,7 @@ import {
   Group,
 } from '@vkontakte/vkui';
 import { CacheLogAdd } from 'src/modules/CacheLog/CacheLogAdd';
+import { CacheLogItemListForm } from 'src/modules/CacheLogItem/CacheLogItemListForm';
 import { CacheLogCtrl } from 'src/modules/CacheLog/cacheLog_ctrl';
 import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
@@ -68,6 +69,10 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
     );
   };
 
+  const cacheLogItemListForm = () => {
+    return <CacheLogItemListForm />;
+  };
+
   return (
     <Panel {...props} className="Panel__fullScreen">
       <PanelHeader
@@ -79,6 +84,7 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
       <CacheLogAdd
         projectId={Number(params?.project_id)}
         contractorForm={contractorFormField()}
+        cacheLogItemListForm={cacheLogItemListForm()}
       />
     </Panel>
   );

@@ -138,3 +138,13 @@ body {
   border-radius: 50%;
   background: #ddd;
 }
+
+.flex-col {
+  display: flex;
+  gap: 10px;
+  align-items: space-between;
+}
+
+.space-div {
+  padding: 100px 0;
+}

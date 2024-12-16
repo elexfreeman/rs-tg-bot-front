@@ -45,7 +45,7 @@ export const ProjectInfo = (props: {table: (projectId: number) => React.ReactNod
         </CellButton>
       </Group>
       {project.id && props.table(Number(project.id))}
-      <div style={{ padding: '100px 0' }}></div>
+      <div className='space-div'></div>
     </>
   );
 };

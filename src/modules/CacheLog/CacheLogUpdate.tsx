@@ -9,6 +9,7 @@ export const CacheLogUpdate = (props: {
   projectId: number;
   cacheLogId: number;
   contractorForm?: React.ReactNode;
+  cacheLogItemListForm?: React.ReactNode;
 }) => {
   const cacheLogStore = useCacheLogStore();
   const cacheLogCtrl = CacheLogCtrl.getInstance();
@@ -27,7 +28,9 @@ export const CacheLogUpdate = (props: {
         cacheLog={cacheLogData}
         isUpdate
         contractorForm={props.contractorForm}
+        cacheLogItemListForm={props.cacheLogItemListForm}
       />
+      <div className='space-div'></div>
     </Group>
   );
 };

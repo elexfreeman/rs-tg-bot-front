@@ -1,47 +1,51 @@
-import { FormLayoutGroup, FormItem, Input, Button } from '@vkontakte/vkui';
-import { CacheLogItemCtrl } from './cacheLogItem_ctrl';
+import { FormLayoutGroup, FormItem, Input } from '@vkontakte/vkui';
 import { CacheLogItemI } from 'src/Entity/CacheLogItemE';
-import { Store } from 'src/store/store';
 
 export const CacheLogItemAddEditForm = (props: {
-  cacheLogItem?: Partial<CacheLogItemI>;
-  isUpdate?: boolean;
+  data: Partial<CacheLogItemI>;
+  dataDefault: Partial<CacheLogItemI>;
+  onChange: (item: Partial<CacheLogItemI>) => void;
 }) => {
-  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
-
   return (
-    <form onSubmit={(e) => cacheLogItemCtrl.onSubmit(e, props.isUpdate)}>
-      <FormLayoutGroup>
-        <FormItem htmlFor="caption" top="Название">
-          <Input
-            id="caption"
-            defaultValue={
-              Store.getInstance().cacheLogItemStore.info.data?.caption
-            }
-          />
-        </FormItem>
+    <FormLayoutGroup>
+      <FormItem htmlFor="caption" top="Название">
+        <Input
+          id="caption"
+          key={props.dataDefault.caption}
+          defaultValue={props.dataDefault.caption}
+          onChange={(event) =>
+            props.onChange({ ...props.data, caption: event.target.value })
+          }
+        />
+      </FormItem>
+      <div className="flex-col">
         <FormItem htmlFor="price" top="Цена">
           <Input
             id="price"
-            key={Store.getInstance().cacheLogItemStore.info.data?.price}
-            defaultValue={
-              Store.getInstance().cacheLogItemStore.info.data?.price
+            key={props.dataDefault.price}
+            defaultValue={props.dataDefault.price}
+            onChange={(event) =>
+              props.onChange({
+                ...props.data,
+                price: Number(event.target.value),
+              })
             }
           />
         </FormItem>
         <FormItem htmlFor="count" top="Количество">
           <Input
             id="count"
-            key={Store.getInstance().cacheLogItemStore.info.data?.count}
-            defaultValue={
-              Store.getInstance().cacheLogItemStore.info.data?.count
+            key={props.dataDefault.count}
+            defaultValue={props.dataDefault.count}
+            onChange={(event) =>
+              props.onChange({
+                ...props.data,
+                count: Number(event.target.value),
+              })
             }
           />
         </FormItem>
-        <FormItem>
-          <Button type="submit">Сохранить</Button>
-        </FormItem>
-      </FormLayoutGroup>
-    </form>
+      </div>
+    </FormLayoutGroup>
   );
 };

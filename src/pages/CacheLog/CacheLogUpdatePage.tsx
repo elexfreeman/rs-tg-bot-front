@@ -12,6 +12,7 @@ import { CacheLogUpdate } from 'src/modules/CacheLog/CacheLogUpdate';
 import { CacheLogCtrl } from 'src/modules/CacheLog/cacheLog_ctrl';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelect';
+import { CacheLogItemListForm } from 'src/modules/CacheLogItem/CacheLogItemListForm';
 import { setModalStore } from 'src/modals/modal.store';
 import { useCacheLogStore } from 'src/store/cacheLog.store';
 import { useContractorStore } from 'src/store/contractor.store';
@@ -80,6 +81,10 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
     );
   };
 
+  const cacheLogItemListForm = () => {
+    return <CacheLogItemListForm cacheLogId={cacheLogId} />;
+  };
+
   return (
     <Panel {...props} className="Panel__fullScreen">
       <PanelHeader
@@ -92,6 +97,7 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
         cacheLogId={cacheLogId}
         projectId={projectId}
         contractorForm={contractorFormField()}
+        cacheLogItemListForm={cacheLogItemListForm()}
       />
     </Panel>
   );
