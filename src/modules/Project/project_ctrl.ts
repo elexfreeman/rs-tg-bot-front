@@ -1,5 +1,5 @@
 import { RouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { Store } from 'src/store/store';
+import ProjectStore from 'src/store/project.store';
 import {
   addProject,
   updateProject,
@@ -37,9 +37,10 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().projectStore.add = await addProject(project);
-    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
-    if (!Store.getInstance().projectStore.add.error) {
+    const projectStore = ProjectStore.useStore();
+    projectStore.add = await addProject(project);
+    ProjectStore.setStore({ ...projectStore });
+    if (!projectStore.add.error) {
       this.routeNavigator.back();
     }
   }
@@ -48,9 +49,11 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().projectStore.update = await updateProject(project);
-    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
-    if (!Store.getInstance().projectStore.update.error) {
+    const projectStore = ProjectStore.useStore();
+
+    projectStore.update = await updateProject(project);
+    ProjectStore.setStore({ ...projectStore });
+    if (!projectStore.update.error) {
       this.routeNavigator.back();
     }
   }
@@ -59,11 +62,13 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().projectStore.info = { data: {} };
-    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
+
+    const projectStore = ProjectStore.useStore();
+    projectStore.info = { data: {} };
+    ProjectStore.setStore({ ...projectStore });
     await delay();
-    Store.getInstance().projectStore.info = await infoProject(projectId);
-    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
+    projectStore.info = await infoProject(projectId);
+    ProjectStore.setStore({ ...projectStore });
   }
 
   goBack() {
@@ -105,8 +110,10 @@ export class ProjectCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().projectStore.list = await getProjectList();
-    Store.getInstance().setProjectStore({ ...Store.getInstance().projectStore });
-    return Store.getInstance().projectStore;
+    const projectStore = ProjectStore.useStore();
+
+    projectStore.list = await getProjectList();
+    ProjectStore.setStore({ ...projectStore });
+    return projectStore;
   }
 }

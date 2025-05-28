@@ -10,11 +10,11 @@ import {
 import { Icon20GearOutline } from '@vkontakte/icons';
 import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
 import { ProjectI } from 'src/api/project_api';
-import { useProjectStore } from 'src/store/project.store';
+import ProjectStore from 'src/store/project.store';
 import { useParams } from '@vkontakte/vk-mini-apps-router';
 
 export const ProjectInfo = (props: {table: (projectId: number) => React.ReactNode}) => {
-  const projectStore = useProjectStore();
+  const projectStore = ProjectStore.useStore();
   const projectCtrl = ProjectCtrl.getInstance();
   const params = useParams<'project_id'>();
   useEffect(() => {

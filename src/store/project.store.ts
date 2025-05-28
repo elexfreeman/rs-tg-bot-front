@@ -25,3 +25,27 @@ const [change, setProjectStore] = createSignal<ProjectStoreI>();
 const [useProjectStore] = bind(change, defaultState);
 
 export { setProjectStore, useProjectStore };
+
+export default new class ProjectStore {
+  setStore:  (payload: ProjectStoreI) => void;
+  useStore: () => ProjectStoreI;
+
+  readonly defaultState: ProjectStoreI = {
+    isLoad: true,
+    list: {},
+    add: {},
+    update: {},
+    info: {},
+  };
+
+  constructor() {
+    const [change, setProjectStore] = createSignal<ProjectStoreI>();
+    const [useProjectStore] = bind(change, this.defaultState);
+
+    this.setStore = setProjectStore;
+    this.useStore = useProjectStore;
+
+    this.setStore(this.defaultState);
+  }
+
+}
