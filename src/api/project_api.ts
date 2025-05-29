@@ -7,7 +7,7 @@ export interface ProjectI {
   description: string;
 }
 
-export const getProjectList = async () => {
+export const getProjectListApi = async () => {
   return await Result.catchError(async () => {
     const data = await apiRequset( '/project/list', {});
     const list: Partial<ProjectI>[] = data.list;
@@ -15,7 +15,7 @@ export const getProjectList = async () => {
   });
 };
 
-export const addProject = async (project: Partial<ProjectI>) => {
+export const addProjectApi = async (project: Partial<ProjectI>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset('/project/add', project);
     const out: { id: number } = data;
@@ -23,7 +23,7 @@ export const addProject = async (project: Partial<ProjectI>) => {
   });
 };
 
-export const updateProject = async (project: Partial<ProjectI>) => {
+export const updateProjectApi = async (project: Partial<ProjectI>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset( '/project/update', project);
     const out: { id: number } = data;
@@ -31,7 +31,7 @@ export const updateProject = async (project: Partial<ProjectI>) => {
   });
 };
 
-export const infoProject = async (projectId: Partial<number>) => {
+export const infoProjectApi = async (projectId: Partial<number>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset( '/project/get', { id: projectId });
     const out:Partial<ProjectI> = data;

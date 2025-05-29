@@ -1,10 +1,10 @@
 import { RouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import ProjectStore from 'src/store/project.store';
 import {
-  addProject,
-  updateProject,
-  infoProject,
-  getProjectList,
+  addProjectApi,
+  updateProjectApi,
+  infoProjectApi,
+  getProjectListApi,
 } from 'src/api/project_api';
 import { delay } from 'src/utils';
 import { ProjectI } from 'src/Entity/ProjectE';
@@ -38,7 +38,7 @@ export class ProjectCtrl {
       return;
     }
     const projectStore = ProjectStore.useStore();
-    projectStore.add = await addProject(project);
+    projectStore.add = await addProjectApi(project);
     ProjectStore.setStore({ ...projectStore });
     if (!projectStore.add.error) {
       this.routeNavigator.back();
@@ -51,7 +51,7 @@ export class ProjectCtrl {
     }
     const projectStore = ProjectStore.useStore();
 
-    projectStore.update = await updateProject(project);
+    projectStore.update = await updateProjectApi(project);
     ProjectStore.setStore({ ...projectStore });
     if (!projectStore.update.error) {
       this.routeNavigator.back();
@@ -67,7 +67,7 @@ export class ProjectCtrl {
     projectStore.info = { data: {} };
     ProjectStore.setStore({ ...projectStore });
     await delay();
-    projectStore.info = await infoProject(projectId);
+    projectStore.info = await infoProjectApi(projectId);
     ProjectStore.setStore({ ...projectStore });
   }
 
@@ -112,7 +112,7 @@ export class ProjectCtrl {
     }
     const projectStore = ProjectStore.useStore();
 
-    projectStore.list = await getProjectList();
+    projectStore.list = await getProjectListApi();
     ProjectStore.setStore({ ...projectStore });
     return projectStore;
   }

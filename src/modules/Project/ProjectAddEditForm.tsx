@@ -1,4 +1,6 @@
 import { FC, memo, useEffect } from 'react';
+import ProjectStore, { useProjectStore } from 'src/store/project.store';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import {
   FormLayoutGroup,
   FormItem,
@@ -6,9 +8,12 @@ import {
   Textarea,
   Button,
 } from '@vkontakte/vkui';
+import {
+  updateProjectApi,
+  ProjectI
+} from 'src/api/project_api';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
-import { ProjectI } from 'src/api/project_api';
 
 interface ProjectAddEditFormPops {
   project?: Partial<ProjectI>;
@@ -18,6 +23,8 @@ interface ProjectAddEditFormPops {
 export const ProjectAddEditForm: FC<ProjectAddEditFormPops> = memo(
   (props: ProjectAddEditFormPops) => {
     const projectCtrl = ProjectCtrl.getInstance();
+    const projectStore = useProjectStore();
+    const routeNavigator = useRouteNavigator();
 
     const {
       register,
@@ -29,11 +36,19 @@ export const ProjectAddEditForm: FC<ProjectAddEditFormPops> = memo(
       values: props.project,
     },);
 
+    const updateProject = async (project: Partial<ProjectI>) => {
+      projectStore.update = await updateProjectApi(project);
+      ProjectStore.setStore({ ...projectStore });
+      if (!projectStore.update.error) {
+        routeNavigator.back();
+      }
+    }
+
     const onSubmit: SubmitHandler<Partial<ProjectI>> = (
       data: Partial<ProjectI>
     ) => {
       if (props.isUpdate) {
-        projectCtrl.updateProject(data);
+        updateProject(data);
       } else {
         projectCtrl.addProject(data);
       }

@@ -1,4 +1,8 @@
 import { useEffect } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import ProjectStore, { useProjectStore } from 'src/store/project.store';
+import { getProjectListApi,
+} from 'src/api/project_api';
 import {
   Group,
   CardGrid,
@@ -6,22 +10,32 @@ import {
   CellButton,
 } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
-import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
-import { useProjectStore } from 'src/store/project.store';
 
 export const ProjectList = () => {
-  const projectCtrl = ProjectCtrl.getInstance();
   const projectStore = useProjectStore();
+  const routeNavigator = useRouteNavigator();
 
   useEffect(() => {
-    projectCtrl.projectList();
+    const fetchData = async() => {
+      projectStore.list = await getProjectListApi();
+      ProjectStore.setStore({ ...projectStore });
+    }
+    fetchData();
   }, []);
+
+  const goToInfoProject = (projectId: number | undefined) => {
+    routeNavigator.push(`ProjectInfo/${projectId}`);
+  }
+
+  const goToAddProject = () => {
+    routeNavigator.push(`ProjectAdd`);
+  }
 
   return (
     <Group>
       <CardGrid size="l">
         <CellButton
-          onClick={() => projectCtrl.goToAddProject()}
+          onClick={() => goToAddProject()}
           before={<Icon28AddOutline />}
         >
           Добавить проект
@@ -29,7 +43,7 @@ export const ProjectList = () => {
         {projectStore.list?.data?.map((item) => (
           <ContentCard
             key={item.id}
-            onClick={() => projectCtrl.goToInfoProject(item.id)}
+            onClick={() => goToInfoProject(item.id)}
             subtitle=""
             header={item.caption}
             caption={item.description}
