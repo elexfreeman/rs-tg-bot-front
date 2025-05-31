@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import ProjectStore, { useProjectStore } from 'src/store/project.store';
+import ProjectStore from 'src/store/project.store';
 import { getProjectListApi,
 } from 'src/api/project_api';
 import {
@@ -12,7 +12,7 @@ import {
 import { Icon28AddOutline } from '@vkontakte/icons';
 
 export const ProjectList = () => {
-  const projectStore = useProjectStore();
+  const projectStore = ProjectStore.useStore();
   const routeNavigator = useRouteNavigator();
 
   useEffect(() => {

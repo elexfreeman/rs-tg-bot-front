@@ -2,21 +2,18 @@ import { useEffect } from 'react';
 import { Group } from '@vkontakte/vkui';
 import { getCacheLogDefault, CacheLogI } from 'src/api/cacheLog_api';
 import { CacheLogAddEditForm } from 'src/modules/CacheLog/CacheLogAddEditForm';
-import {
-  useCacheLogStore,
-  setCacheLogStore,
-} from 'src/store/cacheLog.store';
+import CacheLogStore from 'src/store/cacheLog.store';
 
 export const CacheLogAdd = (props: {
   projectId: number;
   contractorForm?: React.ReactNode;
   cacheLogItemListForm: React.ReactNode;
 }) => {
-  const cacheLogStore = useCacheLogStore();
+  const cacheLogStore = CacheLogStore.useStore();
 
   useEffect(() => {
     cacheLogStore.info.data = getCacheLogDefault();
-    setCacheLogStore({ ...cacheLogStore });
+    CacheLogStore.setStore({ ...cacheLogStore });
   }, []);
 
   const cacheLogData: Partial<CacheLogI> = {

@@ -28,12 +28,10 @@ import { ContractorListPage } from './pages/Contractor/ContractorListPage';
 import { CacheLogAddPage } from './pages/CacheLog/CacheLogAddPage';
 import { CacheLogUpdatePage } from './pages/CacheLog/CacheLogUpdatePage';
 
-import { useProjectStore, setProjectStore } from 'src/store/project.store';
 import {
   useContractorStore,
   setContractorStore,
 } from 'src/store/contractor.store';
-import { useCacheLogStore, setCacheLogStore } from 'src/store/cacheLog.store';
 import {
   useCacheLogItemStore,
   setCacheLogItemStore,
@@ -53,14 +51,10 @@ export const App: FC = () => {
   const routeNavigator = useRouteNavigator();
 
   const store = Store.getInstance();
-  const projectStore = useProjectStore();
   const contractorStore = useContractorStore();
-  const cacheLogStore = useCacheLogStore();
   const cacheLogItemStore = useCacheLogItemStore();
 
-  store.initProjectStore(projectStore, setProjectStore);
   store.initContractorStore(contractorStore, setContractorStore);
-  store.initCacheLogStore(cacheLogStore, setCacheLogStore);
   store.initCacheLogItemStore(cacheLogItemStore, setCacheLogItemStore);
 
   ProjectCtrl.init(routeNavigator);

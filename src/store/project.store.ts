@@ -11,21 +11,6 @@ export interface ProjectStoreI {
   info: ResultI<Partial<ProjectI>>;
 }
 
-export const state: ProjectStoreI = {
-  isLoad: true,
-  list: {},
-  add: {},
-  update: {},
-  info: {},
-};
-
-export const defaultState = { ...state };
-
-const [change, setProjectStore] = createSignal<ProjectStoreI>();
-const [useProjectStore] = bind(change, defaultState);
-
-export { setProjectStore, useProjectStore };
-
 export default new class ProjectStore {
   setStore:  (payload: ProjectStoreI) => void;
   useStore: () => ProjectStoreI;

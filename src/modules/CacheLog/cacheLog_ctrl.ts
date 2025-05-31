@@ -125,13 +125,13 @@ export class CacheLogCtrl {
     if (isUpdate) {
       this.updateCacheLog({
         ...Store.getInstance().cacheLogStore.info.data,
-        project_id: Store.getInstance().projectStore.info.data?.id,
+    //    project_id: Store.getInstance().projectStore.info.data?.id,
         contractor_id: Store.getInstance().contractorStore.info.data?.id,
       });
     } else {
       this.addCacheLog({
         ...Store.getInstance().cacheLogStore.info.data,
-        project_id: Store.getInstance().projectStore.info.data?.id,
+     //   project_id: Store.getInstance().projectStore.info.data?.id,
         contractor_id: Store.getInstance().contractorStore.info.data?.id,
       });
     }

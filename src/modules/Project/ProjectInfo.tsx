@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import {
   Group,
   SimpleCell,
@@ -8,17 +9,30 @@ import {
   CellButton,
 } from '@vkontakte/vkui';
 import { Icon20GearOutline } from '@vkontakte/icons';
-import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
-import { ProjectI } from 'src/api/project_api';
+import { infoProjectApi, ProjectI } from 'src/api/project_api';
 import ProjectStore from 'src/store/project.store';
 import { useParams } from '@vkontakte/vk-mini-apps-router';
+import { delay } from 'src/utils';
 
 export const ProjectInfo = (props: {table: (projectId: number) => React.ReactNode}) => {
   const projectStore = ProjectStore.useStore();
-  const projectCtrl = ProjectCtrl.getInstance();
   const params = useParams<'project_id'>();
+  const routeNavigator = useRouteNavigator();
+
+  const infoProject = async (projectId: number) => {
+    projectStore.info = { data: {} };
+    ProjectStore.setStore({ ...projectStore });
+    await delay();
+    projectStore.info = await infoProjectApi(projectId);
+    ProjectStore.setStore({ ...projectStore });
+  };
+
+  const goToUpdateProject = (projectId?: number) =>  {
+    routeNavigator.push(`/ProjectUpdate/${projectId}`);
+  }
+
   useEffect(() => {
-    projectCtrl.infoProject(Number(params?.project_id));
+    infoProject(Number(params?.project_id));
   }, []);
 
   const project: Partial<ProjectI> = {
@@ -38,7 +52,7 @@ export const ProjectInfo = (props: {table: (projectId: number) => React.ReactNod
         </SimpleCell>
         <SimpleCell multiline>{project.description}</SimpleCell>
         <CellButton
-          onClick={() => projectCtrl.goToUpdateProject(project.id)}
+          onClick={() => goToUpdateProject(project.id)}
           before={<Icon20GearOutline />}
         >
           Настроить проект

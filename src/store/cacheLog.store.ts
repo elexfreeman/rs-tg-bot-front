@@ -11,17 +11,26 @@ export interface CacheLogStoreI {
   info: ResultI<Partial<CacheLogI>>;
 }
 
-export const state: CacheLogStoreI = {
-  isLoad: true,
-  list: {},
-  add: {},
-  update: {},
-  info: {},
-};
+export default new class CacheLogStore {
+  setStore:  (payload: CacheLogStoreI) => void;
+  useStore: () => CacheLogStoreI;
 
-export const defaultState = {...state};
+  readonly defaultState: CacheLogStoreI = {
+    isLoad: true,
+    list: {},
+    add: {},
+    update: {},
+    info: {},
+  };
 
-const [change, setCacheLogStore] = createSignal<CacheLogStoreI>();
-const [useCacheLogStore] = bind(change, defaultState);
+  constructor() {
+    const [change, setCacheLogStore] = createSignal<CacheLogStoreI>();
+    const [useCacheLogStore] = bind(change, this.defaultState);
 
-export { setCacheLogStore, useCacheLogStore };
+    this.setStore = setCacheLogStore;
+    this.useStore = useCacheLogStore;
+
+    this.setStore(this.defaultState);
+  }
+
+}

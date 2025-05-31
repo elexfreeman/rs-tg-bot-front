@@ -2,17 +2,24 @@ import {  useEffect } from 'react';
 import {
   Group,
 } from '@vkontakte/vkui';
-import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
-import { ProjectI } from 'src/api/project_api';
+import { infoProjectApi, ProjectI } from 'src/api/project_api';
 import { ProjectAddEditForm } from 'src/modules/Project/ProjectAddEditForm';
-import { useProjectStore } from 'src/store/project.store';
+import ProjectStore from 'src/store/project.store';
+import { delay } from 'src/utils';
 
 export const ProjectUpdate = (props: {projectId: number}) => {
-  const projectStore = useProjectStore();
-  const projectCtrl = ProjectCtrl.getInstance();
+  const projectStore = ProjectStore.useStore();
+
+  const infoProject = async (projectId: number) => {
+    projectStore.info = { data: {} };
+    ProjectStore.setStore({ ...projectStore });
+    await delay();
+    projectStore.info = await infoProjectApi(projectId);
+    ProjectStore.setStore({ ...projectStore });
+  };
 
   useEffect(() => {
-    projectCtrl.infoProject(props.projectId);
+    infoProject(props.projectId);
   }, []);
 
   const newProject: Partial<ProjectI> = {
