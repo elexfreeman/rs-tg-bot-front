@@ -1,21 +1,39 @@
 import { useEffect } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Group, CellButton, Header, Separator } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
-import { CacheLogCtrl } from './cacheLog_ctrl';
-import { useCacheLogStore } from 'src/store/cacheLog.store';
+import CacheLogStore from 'src/store/cacheLog.store';
+import { getCacheLogListApi } from 'src/api/cacheLog_api';
 
 export const CacheLogList = (props: { projectId: number }) => {
-  const cacheLogCtrl = CacheLogCtrl.getInstance();
-  const cacheLogStore = useCacheLogStore();
+  const cacheLogStore = CacheLogStore.useStore();
+  const routeNavigator = useRouteNavigator();
+
+  const cacheLogList = async (projectId: number) => {
+    cacheLogStore.list = await getCacheLogListApi(projectId);
+    CacheLogStore.setStore({
+      ...cacheLogStore,
+    });
+  }
+
+  const goToAddCacheLog = (projectId: number) => {
+    routeNavigator.push(`/ProjectInfo/${projectId}/CacheLogAdd`);
+  }
+
+  const goToUpdateCacheLog = (projectId?: number, cacheLogId?: number) => {
+    routeNavigator.push(
+      `/ProjectInfo/${projectId}/CacheLogUpdate/${cacheLogId}`
+    );
+  }
 
   useEffect(() => {
-    cacheLogCtrl.cacheLogList(props.projectId);
+    cacheLogList(props.projectId);
   }, []);
 
   return (
     <Group mode="plain" header={<Header mode="secondary">Платежи</Header>}>
       <CellButton
-        onClick={() => cacheLogCtrl.goToAddCacheLog(props.projectId)}
+        onClick={() => goToAddCacheLog(props.projectId)}
         before={<Icon28AddOutline />}
       >
         Добавить платеж
@@ -24,7 +42,7 @@ export const CacheLogList = (props: { projectId: number }) => {
         <>
           <div
             className="table-cache"
-            onClick={() => cacheLogCtrl.goToUpdateCacheLog(props.projectId, item.id)}
+            onClick={() => goToUpdateCacheLog(props.projectId, item.id)}
           >
             <div className="table-cache-item">
               <div className="table-cache-item__date">

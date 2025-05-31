@@ -1,21 +1,37 @@
 import { useEffect } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Group, CellButton, Header, Separator } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import { CacheLogItemCtrl } from 'src/modules/CacheLogItem/cacheLogItem_ctrl';
-import { useCacheLogItemStore } from 'src/store/cacheLogItem.store';
+import CacheLogItemStore from 'src/store/cacheLogItem.store';
+import { getCacheLogItemListApi } from 'src/api/cacheLogItem_api';
 
 export const CacheLogItemList = (props: { projectId: number }) => {
   const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
-  const cacheLogItemStore = useCacheLogItemStore();
+  const cacheLogItemStore = CacheLogItemStore.useStore();
+  const routeNavigator = useRouteNavigator();
+
+  const cacheLogItemList = async (cacheLogId: number) => {
+    const out = await getCacheLogItemListApi(cacheLogId);
+    cacheLogItemStore.list = out;
+    CacheLogItemStore.setStore({
+      ...cacheLogItemStore,
+    });
+    return out;
+  }
+
+  const goToAddCacheLogItem = (projectId: number) => {
+    routeNavigator.push(`/ProjectInfo/${projectId}/CacheLogItemAdd`);
+  }
 
   useEffect(() => {
-    cacheLogItemCtrl.cacheLogItemList(props.projectId);
+    cacheLogItemList(props.projectId);
   }, []);
 
   return (
     <Group mode="plain" header={<Header mode="secondary">Платежи</Header>}>
       <CellButton
-        onClick={() => cacheLogItemCtrl.goToAddCacheLogItem(props.projectId)}
+        onClick={() => goToAddCacheLogItem(props.projectId)}
         before={<Icon28AddOutline />}
       >
         Добавить платеж

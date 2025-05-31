@@ -1,9 +1,9 @@
 import { RouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Store } from 'src/store/store';
 import {
-  getCacheLogItemList,
-  addCacheLogItem,
-  updateCacheLogItem,
+  getCacheLogItemListApi,
+  addCacheLogItemApi,
+  updateCacheLogItemApi,
 } from 'src/api/cacheLogItem_api';
 import { getLang } from 'src/lang/lang';
 import { SelectFieldI } from 'src/types';
@@ -44,7 +44,7 @@ export class CacheLogItemCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogItemStore.add = await addCacheLogItem(
+    Store.getInstance().cacheLogItemStore.add = await addCacheLogItemApi(
       cacheLogItem
     );
     Store.getInstance().setCacheLogItemStore({
@@ -59,7 +59,7 @@ export class CacheLogItemCtrl {
     if (!this.isInit) {
       return;
     }
-    Store.getInstance().cacheLogItemStore.update = await updateCacheLogItem(
+    Store.getInstance().cacheLogItemStore.update = await updateCacheLogItemApi(
       cacheLogItem
     );
     Store.getInstance().setCacheLogItemStore({
@@ -81,7 +81,7 @@ export class CacheLogItemCtrl {
     if (!this.isInit) {
       return;
     }
-    const out = await getCacheLogItemList(cacheLogId);
+    const out = await getCacheLogItemListApi(cacheLogId);
     Store.getInstance().cacheLogItemStore.list = out;
     Store.getInstance().setCacheLogItemStore({
       ...Store.getInstance().cacheLogItemStore,

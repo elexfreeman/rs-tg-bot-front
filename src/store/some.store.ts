@@ -6,18 +6,23 @@ export interface NavStoreI  {
     title: string
 }
 
-export const mainPageNav = {
-    path: '/',
-    title: 'Главная'
+export default new class NavStore {
+    setStore:  (payload: NavStoreI[]) => void;
+    useStore: () => NavStoreI[];
+
+    readonly defaultState = [{
+        path: '/',
+        title: 'Главная'
+    }];
+
+    constructor() {
+    const [change, setNavStore] = createSignal<NavStoreI[]>();
+    const [useNavStore] = bind(change, this.defaultState);
+
+    this.setStore = setNavStore;
+    this.useStore = useNavStore;
+
+    this.setStore(this.defaultState);
+    }
+
 }
-
-export const defaultState = [mainPageNav];
-
-const [navChange, setNavStore] = createSignal<NavStoreI[]>();
-const [useNavStore] = bind(navChange, defaultState)
-
-export {
-    setNavStore,
-    useNavStore,
-}
-

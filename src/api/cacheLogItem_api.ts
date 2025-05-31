@@ -12,7 +12,7 @@ export const getCacheLogItemDefault = (): CacheLogItemI => {
   };
 };
 
-export const getCacheLogItemList = async (cacheLogId: number) => {
+export const getCacheLogItemListApi = async (cacheLogId: number) => {
   return await Result.catchError(async () => {
     const data = await apiRequset('/cache_log_item/list', {
       cache_log_id: cacheLogId,
@@ -22,7 +22,7 @@ export const getCacheLogItemList = async (cacheLogId: number) => {
   });
 };
 
-export const addManyCacheLogItem = async (cacheLogItemList: Partial<CacheLogItemI[]>) => {
+export const addManyCacheLogItemApi = async (cacheLogItemList: Partial<CacheLogItemI[]>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset('/cache_log_item/add_many', cacheLogItemList);
     const out: { id: number } = data;
@@ -30,7 +30,7 @@ export const addManyCacheLogItem = async (cacheLogItemList: Partial<CacheLogItem
   });
 };
 
-export const addCacheLogItem = async (cacheLogItem: Partial<CacheLogItemI>) => {
+export const addCacheLogItemApi = async (cacheLogItem: Partial<CacheLogItemI>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset('/cache_log_item/add', cacheLogItem);
     const out: { id: number } = data;
@@ -38,7 +38,7 @@ export const addCacheLogItem = async (cacheLogItem: Partial<CacheLogItemI>) => {
   });
 };
 
-export const updateCacheLogItem = async (cacheLogItem: Partial<CacheLogItemI>) => {
+export const updateCacheLogItemApi = async (cacheLogItem: Partial<CacheLogItemI>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset('/cache_log_item/update', cacheLogItem);
     const out: { id: number } = data;

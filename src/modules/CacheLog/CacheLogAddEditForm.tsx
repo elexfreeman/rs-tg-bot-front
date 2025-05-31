@@ -6,11 +6,12 @@ import {
   Textarea,
   Button,
 } from '@vkontakte/vkui';
-import { CacheLogCtrl } from './cacheLog_ctrl';
-import { CacheLogI } from 'src/api/cacheLog_api';
-import { Store } from 'src/store/store';
-import { setCacheLogStore, useCacheLogStore } from 'src/store/cacheLog.store';
+import { CacheLogI, updateCacheLogApi} from 'src/api/cacheLog_api';
 import { Result } from 'src/system/error_sys';
+import CacheLogStore from 'src/store/cacheLog.store';
+import ContractorStore from 'src/store/contractor.store';
+import ProjectLogStore from 'src/store/project.store';
+import { delay } from 'src/utils';
 
 export const CacheLogAddEditForm = (props: {
   cacheLog?: Partial<CacheLogI>;
@@ -18,8 +19,9 @@ export const CacheLogAddEditForm = (props: {
   contractorForm: React.ReactNode;
   cacheLogItemListForm: React.ReactNode;
 }) => {
-  const cacheLogCtrl = CacheLogCtrl.getInstance();
-  const cacheLogStore = useCacheLogStore();
+  const cacheLogStore = CacheLogStore.useStore();
+  const projectStore = ProjectLogStore.useStore();
+  const contractorStore = ContractorStore.useStore();
 
   const [updateData, setUpdateData] = useState<Partial<CacheLogI>>({});
 
@@ -32,10 +34,15 @@ export const CacheLogAddEditForm = (props: {
     setUpdateData({ ...updateData });
   };
 
-  const onSave = () => {
+  const onSave = async () => {
     const info = Result.setData({ ...updateData });
-    setCacheLogStore({ ...cacheLogStore, info });
-    cacheLogCtrl.onSubmit(props.isUpdate);
+    CacheLogStore.setStore({ ...cacheLogStore, info });
+    await delay();
+    updateCacheLogApi({
+      ...cacheLogStore.info.data,
+      project_id: projectStore.info.data?.id,
+      contractor_id: contractorStore.info.data?.id,
+    });
   };
 
   return (
@@ -43,18 +50,16 @@ export const CacheLogAddEditForm = (props: {
       <FormItem htmlFor="caption" top="Название">
         <Input
           id="caption"
-          key={Store.getInstance().cacheLogStore.info.data?.caption}
-          defaultValue={Store.getInstance().cacheLogStore.info.data?.caption}
+          key={cacheLogStore.info.data?.caption}
+          defaultValue={cacheLogStore.info.data?.caption}
           onChange={(event) => onUpdateData('caption', event.target.value)}
         />
       </FormItem>
       <FormItem top="Описание">
         <Textarea
           placeholder="Описание проекта..."
-          key={Store.getInstance().cacheLogStore.info.data?.description}
-          defaultValue={
-            Store.getInstance().cacheLogStore.info.data?.description
-          }
+          key={cacheLogStore.info.data?.description}
+          defaultValue={ cacheLogStore.info.data?.description }
           onChange={(event) => onUpdateData('description', event.target.value)}
         />
       </FormItem>

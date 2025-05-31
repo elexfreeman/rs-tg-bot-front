@@ -9,7 +9,6 @@ export interface ContractorStoreI {
   add: ResultI<{id: number}>;
   update: ResultI<{id: number}>;
   info: ResultI<Partial<ContractorI>>;
-  getData: () => ContractorStoreI;
 }
 
 export const state: ContractorStoreI = {
@@ -18,12 +17,27 @@ export const state: ContractorStoreI = {
   add: {},
   update: {},
   info: {},
-  getData: () => state,
 };
 
-export const defaultState = {...state};
+export default new class ContractorStore {
+  setStore:  (payload: ContractorStoreI) => void;
+  useStore: () => ContractorStoreI;
 
-const [change, setContractorStore] = createSignal<ContractorStoreI>();
-const [useContractorStore] = bind(change, defaultState);
+  readonly defaultState: ContractorStoreI = {
+    isLoad: true,
+    list: {},
+    add: {},
+    update: {},
+    info: {},
+  };
 
-export { setContractorStore, useContractorStore };
+  constructor() {
+    const [change, setContractorStore] = createSignal<ContractorStoreI>();
+    const [useContractorStore] = bind(change, this.defaultState);
+
+    this.setStore = setContractorStore;
+    this.useStore = useContractorStore;
+
+    this.setStore(this.defaultState);
+  }
+}
