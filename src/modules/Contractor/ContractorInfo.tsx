@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useRouteNavigator, useParams } from '@vkontakte/vk-mini-apps-router';
 import {
   Group,
   SimpleCell,
@@ -8,20 +9,31 @@ import {
   CellButton,
 } from '@vkontakte/vkui';
 import { Icon20GearOutline } from '@vkontakte/icons';
-import { ContractorCtrl } from './contractor_ctrl';
-import { ContractorI } from 'src/api/contractor_api';
-import { useContractorStore } from 'src/store/contractor.store';
-import { useParams } from '@vkontakte/vk-mini-apps-router';
+import { ContractorI, infoContractorApi } from 'src/api/contractor_api';
+import ContractorStore from 'src/store/contractor.store';
+import { delay } from 'src/utils';
 
 export const ContractorInfo = (props: {
   table?: (contractorId: number) => React.ReactNode;
 }) => {
-  const contractorStore = useContractorStore();
-  const contractorCtrl = ContractorCtrl.getInstance();
+  const contractorStore = ContractorStore.useStore();
+  const routeNavigator = useRouteNavigator();
   const params = useParams<'contractor_id'>();
 
+  const infoContractor = async (contractorId: number) => {
+    contractorStore.info = { data: {} };
+    ContractorStore.setStore({ ...contractorStore });
+    await delay();
+    contractorStore.info = await infoContractorApi(contractorId);
+    ContractorStore.setStore({ ...contractorStore });
+  }
+
+  const goToUpdateContractor = (contractorId?: number) => {
+    routeNavigator.push(`/ContractorUpdate/${contractorId}`);
+  }
+
   useEffect(() => {
-    contractorCtrl.infoContractor(Number(params?.contractor_id));
+    infoContractor(Number(params?.contractor_id));
   }, []);
 
   const contractor: Partial<ContractorI> = {
@@ -41,7 +53,7 @@ export const ContractorInfo = (props: {
         </SimpleCell>
         <SimpleCell multiline>{contractor.description}</SimpleCell>
         <CellButton
-          onClick={() => contractorCtrl.goToUpdateContractor(contractor.id)}
+          onClick={() => goToUpdateContractor(contractor.id)}
           before={<Icon20GearOutline />}
         >
           Настроить проект

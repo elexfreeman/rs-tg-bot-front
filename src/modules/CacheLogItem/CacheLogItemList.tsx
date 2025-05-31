@@ -2,12 +2,10 @@ import { useEffect } from 'react';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Group, CellButton, Header, Separator } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
-import { CacheLogItemCtrl } from 'src/modules/CacheLogItem/cacheLogItem_ctrl';
 import CacheLogItemStore from 'src/store/cacheLogItem.store';
 import { getCacheLogItemListApi } from 'src/api/cacheLogItem_api';
 
 export const CacheLogItemList = (props: { projectId: number }) => {
-  const cacheLogItemCtrl = CacheLogItemCtrl.getInstance();
   const cacheLogItemStore = CacheLogItemStore.useStore();
   const routeNavigator = useRouteNavigator();
 
@@ -22,6 +20,12 @@ export const CacheLogItemList = (props: { projectId: number }) => {
 
   const goToAddCacheLogItem = (projectId: number) => {
     routeNavigator.push(`/ProjectInfo/${projectId}/CacheLogItemAdd`);
+  }
+
+  const goToUpdateCacheLogItem = (projectId?: number, cacheLogItemId?: number) => {
+    routeNavigator.push(
+      `/ProjectInfo/${projectId}/CacheLogItemUpdate/${cacheLogItemId}`
+    );
   }
 
   useEffect(() => {
@@ -40,7 +44,7 @@ export const CacheLogItemList = (props: { projectId: number }) => {
         <>
           <div
             className="table-cache"
-            onClick={() => cacheLogItemCtrl.goToUpdateCacheLogItem(props.projectId, item.id)}
+            onClick={() => goToUpdateCacheLogItem(props.projectId, item.id)}
           >
             <div className="table-cache-item">
               <div className="table-cache-item__date">

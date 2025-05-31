@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import {
   Group,
   CardGrid,
@@ -6,22 +7,35 @@ import {
   CellButton,
 } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
-import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
-import { useContractorStore } from 'src/store/contractor.store';
+import ContractorStore from 'src/store/contractor.store';
+import { getContractorListApi } from 'src/api/contractor_api';
 
 export const ContractorList = () => {
-  const contractorCtrl = ContractorCtrl.getInstance();
-  const contractorStore = useContractorStore();
+  const contractorStore = ContractorStore.useStore();
+  const routeNavigator = useRouteNavigator();
+
+  const contractorList = async() => {
+    contractorStore.list = await getContractorListApi();
+    ContractorStore.setStore({ ...contractorStore });
+  }
+
+  const goToInfoContractor = (contractorId?: number) => {
+    routeNavigator.push(`/ContractorUpdate/${contractorId}`);
+  }
+
+  const goToAddContractor = () => {
+    routeNavigator.push(`/ContractorAdd`);
+  }
 
   useEffect(() => {
-    contractorCtrl.contractorList();
+    contractorList();
   }, []);
 
   return (
     <Group>
       <CardGrid size="l">
         <CellButton
-          onClick={() => contractorCtrl.goToAddContractor()}
+          onClick={() => goToAddContractor()}
           before={<Icon28AddOutline />}
         >
           Добавить контрагента
@@ -29,7 +43,7 @@ export const ContractorList = () => {
         {contractorStore.list?.data?.map((item) => (
           <ContentCard
             key={item.id}
-            onClick={() => contractorCtrl.goToInfoContractor(item.id)}
+            onClick={() => goToInfoContractor(item.id)}
             subtitle=""
             header={item.caption}
             caption={item.description}

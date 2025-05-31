@@ -9,37 +9,68 @@ import {
   Group,
 } from '@vkontakte/vkui';
 import { CacheLogUpdate } from 'src/modules/CacheLog/CacheLogUpdate';
-import { CacheLogCtrl } from 'src/modules/CacheLog/cacheLog_ctrl';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelect';
 import { CacheLogItemListForm } from 'src/modules/CacheLogItem/CacheLogItemListForm';
 import { setModalStore } from 'src/modals/modal.store';
-import { useCacheLogStore } from 'src/store/cacheLog.store';
-import { useContractorStore } from 'src/store/contractor.store';
-import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
-import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
+import ContractorStore from 'src/store/contractor.store';
+import ProjectStore from 'src/store/project.store';
+import CacheLogStore from 'src/store/cacheLog.store';
+import { infoProjectApi } from 'src/api/project_api';
+import { delay } from 'src/utils';
+import { infoCacheLogApi } from 'src/api/cacheLog_api';
+import { infoContractorApi } from 'src/api/contractor_api';
 
 export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
-  const cacheLogCtrl = CacheLogCtrl.getInstance();
-  const projectCtrl = ProjectCtrl.getInstance();
-  const contractorCtrl = ContractorCtrl.getInstance();
   const params = useParams();
   const projectId = Number(params?.project_id);
   const cacheLogId = Number(params?.cache_log_id);
-  const contractorStore = useContractorStore();
-  const cacheLogStore = useCacheLogStore();
+  const contractorStore = ContractorStore.useStore();
+  const cacheLogStore = CacheLogStore.useStore();
+
+  const infoProject = async (projectId: number) => {
+    const projectStore = ProjectStore.useStore();
+    projectStore.info = { data: {} };
+    ProjectStore.setStore({ ...projectStore });
+    await delay();
+    projectStore.info = await infoProjectApi(projectId);
+    ProjectStore.setStore({ ...projectStore });
+  }
+
+  const infoCacheLog = async (cacheLogId: number, projectId: number) => {
+    cacheLogStore.info = { data: {} };
+    CacheLogStore.setStore({
+      ...cacheLogStore,
+    });
+    await delay();
+    cacheLogStore.info = await infoCacheLogApi(
+      cacheLogId,
+      projectId
+    );
+    CacheLogStore.setStore({
+      ...cacheLogStore,
+    });
+  }
+
+  const infoContractor = async (contractorId: number) => {
+    contractorStore.info = { data: {} };
+    ContractorStore.setStore({ ...contractorStore });
+    await delay();
+    contractorStore.info = await infoContractorApi(contractorId);
+    ContractorStore.setStore({ ...contractorStore });
+  }
 
   // заполняем инфу о проекте и затратах
   useEffect(() => {
-    projectCtrl.infoProject(projectId);
-    cacheLogCtrl.infoCacheLog(cacheLogId, projectId);
+    infoProject(projectId);
+    infoCacheLog(cacheLogId, projectId);
   }, []);
 
   // заполняем инфу о контрагенте если есть id
   const contractorId = cacheLogStore.info.data?.contractor_id;
   useEffect(() => {
     if (contractorId) {
-      contractorCtrl.infoContractor(contractorId);
+      infoContractor(contractorId);
     }
   }, [contractorId]);
 
@@ -85,11 +116,15 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
     return <CacheLogItemListForm cacheLogId={cacheLogId} />;
   };
 
+  const goBack = () => {
+    routeNavigator.back();
+  }
+
   return (
     <Panel {...props} className="Panel__fullScreen">
       <PanelHeader
         delimiter="none"
-        before={<PanelHeaderBack onClick={() => cacheLogCtrl.goBack()} />}
+        before={<PanelHeaderBack onClick={() => goBack()} />}
       >
         Редактировать платеж
       </PanelHeader>

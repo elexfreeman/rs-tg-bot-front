@@ -1,15 +1,23 @@
 import { useEffect } from 'react';
 import { Group } from '@vkontakte/vkui';
-import { ContractorCtrl } from './contractor_ctrl';
 import { ContractorAddEditForm } from 'src/modules/Contractor/ContractorAddEditForm';
-import { useContractorStore } from 'src/store/contractor.store';
+import ContractorStore from 'src/store/contractor.store';
+import { delay } from 'src/utils';
+import { infoContractorApi } from 'src/api/contractor_api';
 
 export const ContractorUpdate = (props: { contractorId: number }) => {
-  const contractorStore = useContractorStore();
+  const contractorStore = ContractorStore.useStore();
+
+  const infoContractor = async(contractorId: number) => {
+    contractorStore.info = { data: {} };
+    ContractorStore.setStore({ ...contractorStore });
+    await delay();
+    contractorStore.info = await infoContractorApi(contractorId);
+    ContractorStore.setStore({ ...contractorStore });
+  }
 
   useEffect(() => {
-  const contractorCtrl = ContractorCtrl.getInstance();
-    contractorCtrl.infoContractor(props.contractorId);
+    infoContractor(props.contractorId);
   }, []);
 
   return (

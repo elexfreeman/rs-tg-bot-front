@@ -7,7 +7,7 @@ export interface ContractorI {
   description: string;
 }
 
-export const getContractorList = async () => {
+export const getContractorListApi = async () => {
   return await Result.catchError(async () => {
     const data = await apiRequset( '/contractor/list', {});
     const list: Partial<ContractorI>[] = data.list;
@@ -15,7 +15,7 @@ export const getContractorList = async () => {
   });
 };
 
-export const addContractor = async (contractor: Partial<ContractorI>) => {
+export const addContractorApi = async (contractor: Partial<ContractorI>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset( '/contractor/add', contractor);
     const out: { id: number } = data;
@@ -23,7 +23,7 @@ export const addContractor = async (contractor: Partial<ContractorI>) => {
   });
 };
 
-export const updateContractor = async (contractor: Partial<ContractorI>) => {
+export const updateContractorApi = async (contractor: Partial<ContractorI>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset( '/contractor/update', contractor);
     const out: { id: number } = data;
@@ -31,7 +31,7 @@ export const updateContractor = async (contractor: Partial<ContractorI>) => {
   });
 };
 
-export const infoContractor = async (contractorId: Partial<number>) => {
+export const infoContractorApi = async (contractorId: Partial<number>) => {
   return await Result.catchError(async () => {
     const data = await apiRequset( '/contractor/get', { id: contractorId });
     const out:Partial<ContractorI> = data;

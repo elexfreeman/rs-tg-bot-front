@@ -10,12 +10,11 @@ import {
 } from '@vkontakte/vkui';
 import { CacheLogAdd } from 'src/modules/CacheLog/CacheLogAdd';
 import { CacheLogItemListForm } from 'src/modules/CacheLogItem/CacheLogItemListForm';
-import { CacheLogCtrl } from 'src/modules/CacheLog/cacheLog_ctrl';
 import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelect';
 import { setModalStore } from 'src/modals/modal.store';
-import { Store } from 'src/store/store';
+import ContractorStore from 'src/store/contractor.store';
 
 enum PanelView {
   addPage = 'addPage',
@@ -23,11 +22,11 @@ enum PanelView {
 }
 
 export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
-  const cacheLogCtrl = CacheLogCtrl.getInstance();
   const projectCtrl = ProjectCtrl.getInstance();
   const params = useParams();
   const projectId = Number(params?.project_id);
   const routeNavigator = useRouteNavigator();
+  const contractorStore = ContractorStore.useStore();
 
   const onSelect = () => {
     routeNavigator.hideModal();
@@ -63,7 +62,7 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
     return (
       <FormItem top="Выберите контрагента">
         <SelectMimicry placeholder="Не выбран" onClick={() => onShowModal()}>
-          {Store.getInstance().contractorStore.info.data?.caption}
+          {contractorStore.info.data?.caption}
         </SelectMimicry>
       </FormItem>
     );
@@ -73,11 +72,15 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
     return <CacheLogItemListForm />;
   };
 
+  const goBack = () => {
+    routeNavigator.back();
+  }
+
   return (
     <Panel {...props} className="Panel__fullScreen">
       <PanelHeader
         delimiter="none"
-        before={<PanelHeaderBack onClick={() => cacheLogCtrl.goBack()} />}
+        before={<PanelHeaderBack onClick={() => goBack()} />}
       >
         Новый платеж
       </PanelHeader>

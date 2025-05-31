@@ -28,39 +28,11 @@ import { ContractorListPage } from './pages/Contractor/ContractorListPage';
 import { CacheLogAddPage } from './pages/CacheLog/CacheLogAddPage';
 import { CacheLogUpdatePage } from './pages/CacheLog/CacheLogUpdatePage';
 
-import {
-  useContractorStore,
-  setContractorStore,
-} from 'src/store/contractor.store';
-import {
-  useCacheLogItemStore,
-  setCacheLogItemStore,
-} from 'src/store/cacheLogItem.store';
-
-import { Store } from './store/store';
-
-import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
-import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
-import { CacheLogCtrl } from 'src/modules/CacheLog/cacheLog_ctrl';
-import { CacheLogItemCtrl } from 'src/modules/CacheLogItem/cacheLogItem_ctrl';
-
 export const App: FC = () => {
   const routerPopout = usePopout();
 
   /** Возвращает объект с помощью которого можно совершать переходы в навигации */
   const routeNavigator = useRouteNavigator();
-
-  const store = Store.getInstance();
-  const contractorStore = useContractorStore();
-  const cacheLogItemStore = useCacheLogItemStore();
-
-  store.initContractorStore(contractorStore, setContractorStore);
-  store.initCacheLogItemStore(cacheLogItemStore, setCacheLogItemStore);
-
-  ProjectCtrl.init(routeNavigator);
-  ContractorCtrl.init(routeNavigator);
-  CacheLogCtrl.init(routeNavigator);
-  CacheLogItemCtrl.init(routeNavigator);
 
   /** Получаем текущую позицию */
   const {

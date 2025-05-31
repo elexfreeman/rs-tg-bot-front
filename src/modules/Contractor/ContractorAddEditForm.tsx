@@ -1,3 +1,4 @@
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import {
   FormLayoutGroup,
   FormItem,
@@ -5,8 +6,8 @@ import {
   Textarea,
   Button,
 } from '@vkontakte/vkui';
-import { ContractorI } from 'src/api/contractor_api';
-import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
+import { addContractorApi, ContractorI, updateContractorApi } from 'src/api/contractor_api';
+import ContractorStore from 'src/store/contractor.store';
 
 interface ContractorAddEditFormPops {
   contractor?: Partial<ContractorI>;
@@ -14,9 +15,50 @@ interface ContractorAddEditFormPops {
 }
 
 export const ContractorAddEditForm = (props: ContractorAddEditFormPops) => {
+  const contractorStore = ContractorStore.useStore();
+  const routeNavigator = useRouteNavigator();
+
+  const updateContractor = async (contractor: Partial<ContractorI>) => {
+    contractorStore.update = await updateContractorApi(contractor);
+    ContractorStore.setStore({ ...contractorStore });
+    if (!contractorStore.update.error) {
+      routeNavigator.back();
+    }
+  }
+
+  const addContractor = async (contractor: Partial<ContractorI>) => {
+    contractorStore.add = await addContractorApi(contractor);
+    ContractorStore.setStore({ ...contractorStore });
+    if (!contractorStore.add.error) {
+      routeNavigator.back();
+    }
+  }
+
+  const onSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      itemId: { value: number };
+      caption: { value: string };
+      description: { value: string };
+    };
+    if (props.isUpdate) {
+      updateContractor({
+        caption: target.caption.value,
+        description: target.description.value,
+        id: Number(target.itemId.value),
+      });
+    } else {
+      addContractor({
+        caption: target.caption.value,
+        description: target.description.value,
+        id: contractorStore.info.data?.id,
+      });
+    }
+  }
+
   return (
     <form
-      onSubmit={(e) => ContractorCtrl.getInstance().onSubmit(e, props.isUpdate)}
+      onSubmit={onSubmit}
     >
       <input
         type="hidden"
