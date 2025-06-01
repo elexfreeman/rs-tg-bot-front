@@ -1,15 +1,20 @@
 import { FC, memo } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { NavIdProps, Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 import { ProjectAdd } from 'src/modules/Project/ProjectAdd';
-import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
 
 export const ProjectAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
-  const projectCtrl = ProjectCtrl.getInstance();
+  const routeNavigator = useRouteNavigator();
+
+  const goBack = () => {
+    routeNavigator.back();
+  }
+
   return (
     <Panel className="Panel__fullScreen" {...props}>
       <PanelHeader
         delimiter="none"
-        before={<PanelHeaderBack onClick={() => projectCtrl.goBack()} />}
+        before={<PanelHeaderBack onClick={() => goBack()} />}
       >
         Новый проект
       </PanelHeader>

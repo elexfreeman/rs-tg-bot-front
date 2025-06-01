@@ -27,9 +27,9 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
   const cacheLogId = Number(params?.cache_log_id);
   const contractorStore = ContractorStore.useStore();
   const cacheLogStore = CacheLogStore.useStore();
+  const projectStore = ProjectStore.useStore();
 
   const infoProject = async (projectId: number) => {
-    const projectStore = ProjectStore.useStore();
     projectStore.info = { data: {} };
     ProjectStore.setStore({ ...projectStore });
     await delay();

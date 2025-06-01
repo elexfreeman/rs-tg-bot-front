@@ -1,4 +1,5 @@
 import { FC, memo, useEffect } from 'react';
+import ProjectStore from 'src/store/project.store';
 import {
   NavIdProps,
   Panel,
@@ -10,11 +11,12 @@ import {
 } from '@vkontakte/vkui';
 import { CacheLogAdd } from 'src/modules/CacheLog/CacheLogAdd';
 import { CacheLogItemListForm } from 'src/modules/CacheLogItem/CacheLogItemListForm';
-import { ProjectCtrl } from 'src/modules/Project/project_ctrl';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelect';
 import { setModalStore } from 'src/modals/modal.store';
 import ContractorStore from 'src/store/contractor.store';
+import { infoProjectApi } from 'src/api/project_api';
+import { delay } from 'src/utils';
 
 enum PanelView {
   addPage = 'addPage',
@@ -22,18 +24,25 @@ enum PanelView {
 }
 
 export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
-  const projectCtrl = ProjectCtrl.getInstance();
   const params = useParams();
   const projectId = Number(params?.project_id);
   const routeNavigator = useRouteNavigator();
   const contractorStore = ContractorStore.useStore();
+  const projectStore = ProjectStore.useStore();
 
   const onSelect = () => {
     routeNavigator.hideModal();
   };
+  const infoProject = async(projectId: number) => {
+    projectStore.info = { data: {} };
+    ProjectStore.setStore({ ...projectStore });
+    await delay();
+    projectStore.info = await infoProjectApi(projectId);
+    ProjectStore.setStore({ ...projectStore });
+  }
 
   useEffect(() => {
-    projectCtrl.infoProject(Number(projectId));
+    infoProject(Number(projectId));
   }, []);
 
   const getContractorSelectorContent = () => {

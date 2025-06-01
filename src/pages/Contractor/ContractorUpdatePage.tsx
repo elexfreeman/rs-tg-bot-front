@@ -1,17 +1,22 @@
 import { FC, memo } from 'react';
+import { useRouteNavigator, useParams } from '@vkontakte/vk-mini-apps-router';
 import { NavIdProps, Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 import { ContractorUpdate } from 'src/modules/Contractor/ContractorUpdate';
-import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
-import { useParams } from '@vkontakte/vk-mini-apps-router';
 
 export const ContractorUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
-  const contractorCtrl = ContractorCtrl.getInstance();
+  const routeNavigator = useRouteNavigator();
   const params = useParams<'contractor_id'>();
+
+  const goBack = () => {
+    routeNavigator.back();
+  }
+
+
   return (
     <Panel className="Panel__fullScreen" {...props}>
       <PanelHeader
         delimiter="none"
-        before={<PanelHeaderBack onClick={() => contractorCtrl.goBack()} />}
+        before={<PanelHeaderBack onClick={() => goBack()} />}
       >
         Редактирование контрагента
       </PanelHeader>

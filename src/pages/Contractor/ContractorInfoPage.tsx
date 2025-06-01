@@ -1,4 +1,5 @@
 import { FC, memo } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import {
   NavIdProps,
   Panel,
@@ -6,16 +7,20 @@ import {
   PanelHeaderBack,
 } from '@vkontakte/vkui';
 import { ContractorInfo } from 'src/modules/Contractor/ContractorInfo';
-import { ContractorCtrl } from 'src/modules/Contractor/contractor_ctrl';
 
 export const ContractorInfoPage: FC<NavIdProps> = memo((props: NavIdProps) => {
-  const contractorCtrl = ContractorCtrl.getInstance();
+  const routeNavigator = useRouteNavigator();
+
+  const goBack = () => {
+    routeNavigator.back();
+  }
+
 
   return (
     <Panel className="Panel__fullScreen" {...props}>
       <PanelHeader
         delimiter="none"
-        before={<PanelHeaderBack onClick={() => contractorCtrl.goBack()} />}
+        before={<PanelHeaderBack onClick={() => goBack()} />}
       >
         Контрагент
       </PanelHeader>
