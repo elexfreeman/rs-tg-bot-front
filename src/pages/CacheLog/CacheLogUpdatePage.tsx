@@ -11,7 +11,6 @@ import {
 import { CacheLogUpdate } from 'src/modules/CacheLog/CacheLogUpdate';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelect';
-import { CacheLogItemListForm } from 'src/modules/CacheLogItem/CacheLogItemListForm';
 import { setModalStore } from 'src/modals/modal.store';
 import ContractorStore from 'src/store/contractor.store';
 import ProjectStore from 'src/store/project.store';
@@ -112,10 +111,6 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
     );
   };
 
-  const cacheLogItemListForm = () => {
-    return <CacheLogItemListForm cacheLogId={cacheLogId} />;
-  };
-
   const goBack = () => {
     routeNavigator.back();
   }
@@ -132,7 +127,6 @@ export const CacheLogUpdatePage: FC<NavIdProps> = memo((props: NavIdProps) => {
         cacheLogId={cacheLogId}
         projectId={projectId}
         contractorForm={contractorFormField()}
-        cacheLogItemListForm={cacheLogItemListForm()}
       />
     </Panel>
   );

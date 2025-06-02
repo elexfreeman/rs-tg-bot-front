@@ -17,12 +17,12 @@ export const getCacheLogItemListApi = async (cacheLogId: number) => {
     const data = await apiRequset('/cache_log_items/list', {
       cache_log_id: cacheLogId,
     });
-    const list: Partial<CacheLogItemI>[] = data.list;
+    const list: CacheLogItemI[] = data.list;
     return list;
   });
 };
 
-export const addManyCacheLogItemApi = async (cacheLogItemList: Partial<CacheLogItemI[]>) => {
+export const addManyCacheLogItemApi = async (cacheLogItemList: CacheLogItemI[]) => {
   return await Result.catchError(async () => {
     const data = await apiRequset('/cache_log_items/add_many', cacheLogItemList);
     const out: { id: number } = data;

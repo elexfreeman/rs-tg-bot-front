@@ -7,19 +7,22 @@ import {
   Button,
 } from '@vkontakte/vkui';
 import { addCacheLogApi, CacheLogI, updateCacheLogApi} from 'src/api/cacheLog_api';
+import { CacheLogItemListForm } from 'src/modules/CacheLog/CacheLogItemListForm';
 import CacheLogStore from 'src/store/cacheLog.store';
+import CacheLogItemStore from 'src/store/cacheLogItem.store';
 import ContractorStore from 'src/store/contractor.store';
 import ProjectLogStore from 'src/store/project.store';
 import { delay } from 'src/utils';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { addManyCacheLogItemApi } from 'src/api/cacheLogItem_api';
 
 export const CacheLogAddEditForm = (props: {
   cacheLog?: Partial<CacheLogI>;
   isUpdate?: boolean;
   contractorForm: React.ReactNode;
-  cacheLogItemListForm: React.ReactNode;
 }) => {
   const cacheLogStore = CacheLogStore.useStore();
+  const cacheLogItemStore = CacheLogItemStore.useStore();
   const projectStore = ProjectLogStore.useStore();
   const contractorStore = ContractorStore.useStore();
   const routeNavigator = useRouteNavigator();
@@ -35,17 +38,38 @@ export const CacheLogAddEditForm = (props: {
     setUpdateData({ ...updateData });
   };
 
-  const addCacheLog = async(cacheLog: Partial<CacheLogI>) => {
+  const addCacheLogAction = async() => {
+    const cacheLog = {
+      ...cacheLogStore.info.data,
+      project_id: projectStore.info.data?.id,
+      contractor_id: contractorStore.info.data?.id,
+    }
     cacheLogStore.add = await addCacheLogApi(cacheLog);
-    CacheLogStore.setStore({
-      ...cacheLogStore,
+    CacheLogStore.setStore({ ...cacheLogStore, });
+
+    if(cacheLogStore.add.data?.id && cacheLogItemStore.list?.data?.length) {
+      const cacheLogItems = cacheLogItemStore.list?.data.map((item) => {
+        return {
+          ...item,
+          cache_log_id: Number(cacheLogStore.add.data?.id),
+        }
     });
+
+      cacheLogItemStore.add = await addManyCacheLogItemApi(
+        cacheLogItems
+      )
+    }
     if (cacheLogStore.add.error) {
       routeNavigator.back();
     }
   }
 
-  const updateCacheLog = async (cacheLog: Partial<CacheLogI>) => {
+  const updateCacheLogAction = async () => {
+    const cacheLog = {
+      ...cacheLogStore.info.data,
+      project_id: projectStore.info.data?.id,
+      contractor_id: contractorStore.info.data?.id,
+    }
     cacheLogStore.update = await updateCacheLogApi(cacheLog);
     CacheLogStore.setStore({
       ...cacheLogStore,
@@ -55,20 +79,12 @@ export const CacheLogAddEditForm = (props: {
     }
   }
 
-  const onSubmit = async(isUpdate?: boolean) => {
+  const onSubmit = async() => {
     await delay();
-    if (isUpdate) {
-      updateCacheLog({
-        ...cacheLogStore.info.data,
-        project_id: projectStore.info.data?.id,
-        contractor_id: contractorStore.info.data?.id,
-      });
+    if (props.isUpdate) {
+      updateCacheLogAction();
     } else {
-      addCacheLog({
-        ...cacheLogStore.info.data,
-        project_id: projectStore.info.data?.id,
-        contractor_id: contractorStore.info.data?.id,
-      });
+      addCacheLogAction();
     }
   }
   return (
@@ -90,7 +106,7 @@ export const CacheLogAddEditForm = (props: {
         />
       </FormItem>
       {props.contractorForm && props.contractorForm}
-      {props.cacheLogItemListForm && props.cacheLogItemListForm}
+      <CacheLogItemListForm />
       <FormItem>
         <Button onClick={() => onSubmit()}>Сохранить</Button>
       </FormItem>

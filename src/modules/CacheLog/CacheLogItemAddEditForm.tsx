@@ -8,6 +8,12 @@ export const CacheLogItemAddEditForm = (props: {
 }) => {
   return (
     <FormLayoutGroup>
+        <Input
+          id="id"
+          key={props.dataDefault.id}
+          defaultValue={props.dataDefault.id}
+          hidden
+        />
       <FormItem htmlFor="caption" top="Название">
         <Input
           id="caption"

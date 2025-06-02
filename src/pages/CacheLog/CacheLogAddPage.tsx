@@ -10,7 +10,6 @@ import {
   Group,
 } from '@vkontakte/vkui';
 import { CacheLogAdd } from 'src/modules/CacheLog/CacheLogAdd';
-import { CacheLogItemListForm } from 'src/modules/CacheLogItem/CacheLogItemListForm';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { ContractorListSelect } from 'src/modules/Contractor/ContractorListSelect';
 import { setModalStore } from 'src/modals/modal.store';
@@ -30,9 +29,10 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
   const contractorStore = ContractorStore.useStore();
   const projectStore = ProjectStore.useStore();
 
-  const onSelect = () => {
+  const onSelectContractor = () => {
     routeNavigator.hideModal();
   };
+
   const infoProject = async(projectId: number) => {
     projectStore.info = { data: {} };
     ProjectStore.setStore({ ...projectStore });
@@ -56,7 +56,7 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
           Выбор контрагента
         </PanelHeader>
         <Group>
-          <ContractorListSelect onSelect={onSelect} />
+          <ContractorListSelect onSelect={onSelectContractor} />
         </Group>
       </Panel>
     );
@@ -77,10 +77,6 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
     );
   };
 
-  const cacheLogItemListForm = () => {
-    return <CacheLogItemListForm />;
-  };
-
   const goBack = () => {
     routeNavigator.back();
   }
@@ -96,7 +92,6 @@ export const CacheLogAddPage: FC<NavIdProps> = memo((props: NavIdProps) => {
       <CacheLogAdd
         projectId={Number(params?.project_id)}
         contractorForm={contractorFormField()}
-        cacheLogItemListForm={cacheLogItemListForm()}
       />
     </Panel>
   );

@@ -5,7 +5,7 @@ import { Result, ResultI } from 'src/system/error_sys';
 
 export interface CacheLogItemStoreI {
   isLoad?: boolean;
-  list: ResultI<Partial<CacheLogItemI>[]>;
+  list: ResultI<CacheLogItemI[]>;
   listUpdate: ResultI<Partial<CacheLogItemI>[]>;
   add: ResultI<{id: number}>;
   update: ResultI<{id: number}>;

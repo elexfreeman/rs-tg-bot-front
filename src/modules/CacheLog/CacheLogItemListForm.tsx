@@ -3,7 +3,7 @@ import { Group, CellButton, Header, Separator } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import CacheLogItemStore from 'src/store/cacheLogItem.store';
 import { CacheLogItemI } from 'src/Entity/CacheLogItemE';
-import { CacheLogItemAddEditForm } from 'src/modules/CacheLogItem/CacheLogItemAddEditForm';
+import { CacheLogItemAddEditForm } from 'src/modules/CacheLog/CacheLogItemAddEditForm';
 import { Result } from 'src/system/error_sys';
 import { getCacheLogItemListApi } from 'src/api/cacheLogItem_api';
 
@@ -28,23 +28,20 @@ export const CacheLogItemListForm = (props: { cacheLogId?: number }) => {
     });
   };
 
-  const cacheLogItemList = async(cacheLogId: number) => {
-    const out = await getCacheLogItemListApi(cacheLogId);
-    cacheLogItemStore.list = out;
+  const cacheLogListAction = async (cacheLogId: number) => {
+    cacheLogItemStore.list = await getCacheLogItemListApi(cacheLogId);
     CacheLogItemStore.setStore ({
       ...cacheLogItemStore,
     });
-    return out;
+    // заполняем инфу об позициях платежа из базы
+    setDataDefault(cacheLogItemStore.list?.data || []);
+    setData(cacheLogItemStore.list?.data || []);
+    saveStore(cacheLogItemStore.list?.data);
   }
 
   useEffect(() => {
     if (props.cacheLogId) {
-      // заполняем инфу об позициях платежа из базы
-      cacheLogItemList(props.cacheLogId).then((data) => {
-        setDataDefault(data?.data || []);
-        setData(data?.data || []);
-        saveStore(data?.data);
-      });
+      cacheLogListAction(props.cacheLogId);
     }
   }, []);
 

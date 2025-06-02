@@ -7,7 +7,6 @@ import CacheLogStore from 'src/store/cacheLog.store';
 export const CacheLogAdd = (props: {
   projectId: number;
   contractorForm?: React.ReactNode;
-  cacheLogItemListForm: React.ReactNode;
 }) => {
   const cacheLogStore = CacheLogStore.useStore();
 
@@ -24,7 +23,6 @@ export const CacheLogAdd = (props: {
       <CacheLogAddEditForm
         cacheLog={cacheLogData}
         contractorForm={props.contractorForm}
-        cacheLogItemListForm={props.cacheLogItemListForm}
       />
       <div className='space-div'></div>
     </Group>
