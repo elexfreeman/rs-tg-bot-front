@@ -12,7 +12,7 @@ export const CacheLogUpdate = (props: {
 }) => {
   const cacheLogStore = CacheLogStore.useStore();
 
-  const infoCacheLog = async(cacheLogId: number, projectId: number) => {
+  const infoCacheLogAction = async(cacheLogId: number, projectId: number) => {
     cacheLogStore.info = { data: {} };
     CacheLogStore.setStore({ ...cacheLogStore });
     await delay();
@@ -20,13 +20,11 @@ export const CacheLogUpdate = (props: {
       cacheLogId,
       projectId
     );
-    CacheLogStore.setStore({
-      ...cacheLogStore,
-    });
+    CacheLogStore.setStore(cacheLogStore);
   }
 
   useEffect(() => {
-    infoCacheLog(props.cacheLogId, props.projectId);
+    infoCacheLogAction(props.cacheLogId, props.projectId);
   }, []);
 
   const cacheLogData: Partial<CacheLogI> = {

@@ -24,7 +24,7 @@ export const getCacheLogItemListApi = async (cacheLogId: number) => {
 
 export const addManyCacheLogItemApi = async (cacheLogItemList: CacheLogItemI[]) => {
   return await Result.catchError(async () => {
-    const data = await apiRequset('/cache_log_items/add_many', cacheLogItemList);
+    const data = await apiRequset('/cache_log_items/add_many', {items: cacheLogItemList});
     const out: { id: number } = data;
     return out;
   });

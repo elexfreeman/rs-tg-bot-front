@@ -38,8 +38,8 @@ export const CacheLogList = (props: { projectId: number }) => {
       >
         Добавить платеж
       </CellButton>
-      {cacheLogStore?.list?.data?.map((item) => (
-        <>
+      {cacheLogStore?.list?.data?.map((item, idx) => (
+        <div key={idx}>
           <div
             className="table-cache"
             onClick={() => goToUpdateCacheLog(props.projectId, item.id)}
@@ -57,7 +57,7 @@ export const CacheLogList = (props: { projectId: number }) => {
           </div>
 
           <Separator />
-        </>
+        </div>
       ))}
     </Group>
   );

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Group, CellButton, Header, Separator } from '@vkontakte/vkui';
 import { Icon28AddOutline } from '@vkontakte/icons';
 import CacheLogItemStore from 'src/store/cacheLogItem.store';
+import CacheLogStore from 'src/store/cacheLog.store';
 import { CacheLogItemI } from 'src/Entity/CacheLogItemE';
 import { CacheLogItemAddEditForm } from 'src/modules/CacheLog/CacheLogItemAddEditForm';
 import { Result } from 'src/system/error_sys';
@@ -15,16 +16,24 @@ import { getCacheLogItemListApi } from 'src/api/cacheLogItem_api';
  * При вводе данных сохраняем в локальную переменную и в стор
  *
  * */
-export const CacheLogItemListForm = (props: { cacheLogId?: number }) => {
+export const CacheLogItemListForm = () => {
   const cacheLogItemStore = CacheLogItemStore.useStore();
+  // const cacheLogStore = CacheLogStore.useStore();
 
-  const [data, setData] = useState<Partial<CacheLogItemI>[]>([]);
-  const [dataDefault, setDataDefault] = useState<Partial<CacheLogItemI>[]>([]);
+  const [data, setData] = useState<CacheLogItemI[]>([]);
+  const [dataDefault, setDataDefault] = useState<CacheLogItemI[]>([]);
+  const [cacheLogId, setCacheLogId] = useState<number | undefined>(0);
 
-  const saveStore = (listData?: Partial<CacheLogItemI>[]) => {
+  CacheLogStore.change.subscribe((state) => {
+    if(state.info.data?.id !== cacheLogId) {
+      setCacheLogId(state.info.data?.id);
+    }
+  });
+
+  const saveStore = (listData?: CacheLogItemI[]) => {
     CacheLogItemStore.setStore({
       ...cacheLogItemStore,
-      listUpdate: Result.setData(listData || []),
+      list: Result.setData(listData || []),
     });
   };
 
@@ -40,26 +49,36 @@ export const CacheLogItemListForm = (props: { cacheLogId?: number }) => {
   }
 
   useEffect(() => {
-    if (props.cacheLogId) {
-      cacheLogListAction(props.cacheLogId);
+    if (cacheLogId) {
+      cacheLogListAction(cacheLogId);
     }
-  }, []);
+  }, [cacheLogId]);
 
-  const onUpdateData = (idx: number, _data: Partial<CacheLogItemI>) => {
+  const onUpdateData = (idx: number, _data: CacheLogItemI) => {
     data[idx] = _data;
     setData([...data]);
 
-    const listUpdate = cacheLogItemStore.listUpdate.data || [];
-    listUpdate[idx] = _data;
-    saveStore(listUpdate);
+    const list = cacheLogItemStore.list.data || [];
+    list[idx] = _data;
+    saveStore(list);
   };
 
   const onAddItem = () => {
-    data.push({});
+    data.push({
+      cache_log_id: 0,
+      caption: '',
+      price: 0,
+      count: 0,
+    });
     setData([...data]);
 
-    const listData = cacheLogItemStore.listUpdate.data || [];
-    listData.push({});
+    const listData = cacheLogItemStore.list.data || [];
+    listData.push({
+      cache_log_id: 0,
+      caption: '',
+      price: 0,
+      count: 0,
+    });
     saveStore(listData);
   };
 

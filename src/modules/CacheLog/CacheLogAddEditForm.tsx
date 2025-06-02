@@ -45,6 +45,8 @@ export const CacheLogAddEditForm = (props: {
       contractor_id: contractorStore.info.data?.id,
     }
     cacheLogStore.add = await addCacheLogApi(cacheLog);
+    console.log(cacheLogStore.add)
+    console.log(cacheLogItemStore.list)
     CacheLogStore.setStore({ ...cacheLogStore, });
 
     if(cacheLogStore.add.data?.id && cacheLogItemStore.list?.data?.length) {
@@ -89,7 +91,8 @@ export const CacheLogAddEditForm = (props: {
   }
   return (
     <FormLayoutGroup>
-      <FormItem htmlFor="caption" top="Название">
+      <FormItem top="Название">
+        <input id='id' key={cacheLogStore.info.data?.id} defaultValue={cacheLogStore.info.data?.id} hidden />
         <Input
           id="caption"
           key={cacheLogStore.info.data?.caption}

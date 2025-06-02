@@ -1,3 +1,4 @@
+import { Observable } from "rxjs";
 import { bind } from '@react-rxjs/core';
 import { createSignal } from '@react-rxjs/utils';
 import { CacheLogI } from 'src/Entity/CacheLogE';
@@ -14,6 +15,7 @@ export interface CacheLogStoreI {
 export default new class CacheLogStore {
   setStore:  (payload: CacheLogStoreI) => void;
   useStore: () => CacheLogStoreI;
+  change: Observable<CacheLogStoreI>
 
   readonly defaultState: CacheLogStoreI = {
     isLoad: true,
@@ -26,8 +28,12 @@ export default new class CacheLogStore {
   constructor() {
     const [change, setCacheLogStore] = createSignal<CacheLogStoreI>();
     const [useCacheLogStore] = bind(change, this.defaultState);
+    this.change = change;
 
-    this.setStore = setCacheLogStore;
+    this.setStore = (payload: CacheLogStoreI) => {
+      setCacheLogStore(structuredClone(payload));
+    } ;
+
     this.useStore = useCacheLogStore;
 
     this.setStore(this.defaultState);

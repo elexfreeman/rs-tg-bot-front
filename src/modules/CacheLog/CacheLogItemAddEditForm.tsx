@@ -2,13 +2,13 @@ import { FormLayoutGroup, FormItem, Input } from '@vkontakte/vkui';
 import { CacheLogItemI } from 'src/Entity/CacheLogItemE';
 
 export const CacheLogItemAddEditForm = (props: {
-  data: Partial<CacheLogItemI>;
-  dataDefault: Partial<CacheLogItemI>;
-  onChange: (item: Partial<CacheLogItemI>) => void;
+  data: CacheLogItemI;
+  dataDefault: CacheLogItemI;
+  onChange: (item: CacheLogItemI) => void;
 }) => {
   return (
     <FormLayoutGroup>
-        <Input
+        <input
           id="id"
           key={props.dataDefault.id}
           defaultValue={props.dataDefault.id}
@@ -28,6 +28,7 @@ export const CacheLogItemAddEditForm = (props: {
         <FormItem htmlFor="price" top="Цена">
           <Input
             id="price"
+            type='number'
             key={props.dataDefault.price}
             defaultValue={props.dataDefault.price}
             onChange={(event) =>
@@ -41,6 +42,7 @@ export const CacheLogItemAddEditForm = (props: {
         <FormItem htmlFor="count" top="Количество">
           <Input
             id="count"
+            type='number'
             key={props.dataDefault.count}
             defaultValue={props.dataDefault.count}
             onChange={(event) =>
