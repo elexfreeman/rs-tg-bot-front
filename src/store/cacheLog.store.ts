@@ -31,7 +31,7 @@ export default new class CacheLogStore {
     this.change = change;
 
     this.setStore = (payload: CacheLogStoreI) => {
-      setCacheLogStore(structuredClone(payload));
+      setCacheLogStore({...payload});
     } ;
 
     this.useStore = useCacheLogStore;

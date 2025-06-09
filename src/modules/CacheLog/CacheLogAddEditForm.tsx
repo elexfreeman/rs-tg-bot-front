@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { delay } from 'src/utils';
 import {
   FormLayoutGroup,
   FormItem,
@@ -6,78 +8,99 @@ import {
   Textarea,
   Button,
 } from '@vkontakte/vkui';
-import { addCacheLogApi, CacheLogI, updateCacheLogApi} from 'src/api/cacheLog_api';
-import { CacheLogItemListForm } from 'src/modules/CacheLog/CacheLogItemListForm';
-import CacheLogStore from 'src/store/cacheLog.store';
-import CacheLogItemStore from 'src/store/cacheLogItem.store';
+import {
+  addCacheLogApi as addHeadApi,
+  CacheLogI as HeadI,
+  updateCacheLogApi as updateTableApi
+} from 'src/api/cacheLog_api';
+import { upsertManyCacheLogItemApi as upsertManyTableApi } from 'src/api/cacheLogItem_api';
+import { CacheLogItemListForm as TableForm } from 'src/modules/CacheLog/CacheLogItemListForm';
+import HeadStore from 'src/store/cacheLog.store';
+import TableStore from 'src/store/cacheLogItem.store';
+
 import ContractorStore from 'src/store/contractor.store';
 import ProjectLogStore from 'src/store/project.store';
-import { delay } from 'src/utils';
-import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { addManyCacheLogItemApi } from 'src/api/cacheLogItem_api';
 
 export const CacheLogAddEditForm = (props: {
-  cacheLog?: Partial<CacheLogI>;
+  cacheLog?: Partial<HeadI>;
   isUpdate?: boolean;
   contractorForm: React.ReactNode;
 }) => {
-  const cacheLogStore = CacheLogStore.useStore();
-  const cacheLogItemStore = CacheLogItemStore.useStore();
+  const headStore = HeadStore.useStore();
+  const [headData, setHeadData] = useState<Partial<HeadI>>({});
+    const tableStore = TableStore.useStore();
+
   const projectStore = ProjectLogStore.useStore();
   const contractorStore = ContractorStore.useStore();
   const routeNavigator = useRouteNavigator();
 
-  const [updateData, setUpdateData] = useState<Partial<CacheLogI>>({});
-
   useEffect(() => {
-    setUpdateData(cacheLogStore.info?.data || {});
-  }, [cacheLogStore.info?.data]);
+    setHeadData(headStore.info?.data || {});
+  }, [headStore.info?.data]);
 
-  const onUpdateData = (field: keyof CacheLogI, data: any) => {
-    updateData[field] = data;
-    setUpdateData({ ...updateData });
+  const updateDataAction = (field: keyof HeadI, data: any) => {
+    headData[field] = data;
+    setHeadData({ ...headData });
   };
 
-  const addCacheLogAction = async() => {
-    const cacheLog = {
-      ...cacheLogStore.info.data,
+  const addHeadAction = async() => {
+    const head = {
+      ...headStore.info.data,
       project_id: projectStore.info.data?.id,
       contractor_id: contractorStore.info.data?.id,
     }
-    cacheLogStore.add = await addCacheLogApi(cacheLog);
-    console.log(cacheLogStore.add)
-    console.log(cacheLogItemStore.list)
-    CacheLogStore.setStore({ ...cacheLogStore, });
+    headStore.add = await addHeadApi(head);
+    HeadStore.setStore({ ...headStore, });
 
-    if(cacheLogStore.add.data?.id && cacheLogItemStore.list?.data?.length) {
-      const cacheLogItems = cacheLogItemStore.list?.data.map((item) => {
+    if(headStore.add.data?.id && tableStore.list?.data?.length) {
+      const cacheLogItems = tableStore.list?.data.map((item) => {
         return {
           ...item,
-          cache_log_id: Number(cacheLogStore.add.data?.id),
+          cache_log_id: Number(headStore.add.data?.id),
         }
-    });
+      });
 
-      cacheLogItemStore.add = await addManyCacheLogItemApi(
+      tableStore.add = await upsertManyTableApi(
         cacheLogItems
-      )
+      );
     }
-    if (cacheLogStore.add.error) {
-      routeNavigator.back();
+    routeNavigator.back();
+
+    if (headStore.add.error) {
+      // ?????????????????
+      // routeNavigator.back();
     }
   }
 
   const updateCacheLogAction = async () => {
     const cacheLog = {
-      ...cacheLogStore.info.data,
+      ...headStore.info.data,
       project_id: projectStore.info.data?.id,
       contractor_id: contractorStore.info.data?.id,
     }
-    cacheLogStore.update = await updateCacheLogApi(cacheLog);
-    CacheLogStore.setStore({
-      ...cacheLogStore,
+    headStore.update = await updateTableApi(cacheLog);
+    HeadStore.setStore({
+      ...headStore,
     });
-    if (cacheLogStore.update.error) {
-      routeNavigator.back();
+
+    const cacheLogItems = tableStore.list?.data?.map((item) => {
+      return {
+        id: item.id || 0,
+        ...item,
+        cache_log_id: Number(props.cacheLog?.id),
+      }
+    });
+
+    if(cacheLogItems?.length) {
+      tableStore.update = await upsertManyTableApi(
+        cacheLogItems
+      );
+    }
+
+    // routeNavigator.back();
+
+    if (headStore.update.error) {
+      // routeNavigator.back();
     }
   }
 
@@ -86,30 +109,30 @@ export const CacheLogAddEditForm = (props: {
     if (props.isUpdate) {
       updateCacheLogAction();
     } else {
-      addCacheLogAction();
+      addHeadAction();
     }
   }
   return (
     <FormLayoutGroup>
       <FormItem top="Название">
-        <input id='id' key={cacheLogStore.info.data?.id} defaultValue={cacheLogStore.info.data?.id} hidden />
+        <input id='id' key={headStore.info.data?.id} defaultValue={headStore.info.data?.id} hidden />
         <Input
           id="caption"
-          key={cacheLogStore.info.data?.caption}
-          defaultValue={cacheLogStore.info.data?.caption}
-          onChange={(event) => onUpdateData('caption', event.target.value)}
+          key={headStore.info.data?.caption}
+          defaultValue={headStore.info.data?.caption}
+          onChange={(event) => updateDataAction('caption', event.target.value)}
         />
       </FormItem>
       <FormItem top="Описание">
         <Textarea
           placeholder="Описание проекта..."
-          key={cacheLogStore.info.data?.description}
-          defaultValue={ cacheLogStore.info.data?.description }
-          onChange={(event) => onUpdateData('description', event.target.value)}
+          key={headStore.info.data?.description}
+          defaultValue={ headStore.info.data?.description }
+          onChange={(event) => updateDataAction('description', event.target.value)}
         />
       </FormItem>
       {props.contractorForm && props.contractorForm}
-      <CacheLogItemListForm />
+      <TableForm />
       <FormItem>
         <Button onClick={() => onSubmit()}>Сохранить</Button>
       </FormItem>

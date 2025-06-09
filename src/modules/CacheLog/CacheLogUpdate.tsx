@@ -1,39 +1,52 @@
 import { useEffect } from 'react';
 import { Group } from '@vkontakte/vkui';
-import { CacheLogI, infoCacheLogApi } from 'src/api/cacheLog_api';
-import { CacheLogAddEditForm } from './CacheLogAddEditForm';
-import CacheLogStore from 'src/store/cacheLog.store';
+import { CacheLogI as HeadI, infoCacheLogApi as infoHeadApi } from 'src/api/cacheLog_api';
+import { CacheLogAddEditForm as HeadAddEditForm } from './CacheLogAddEditForm';
+import HeadStore from 'src/store/cacheLog.store';
+import TableItemStore from 'src/store/cacheLogItem.store';
 import { delay } from 'src/utils';
+import { getCacheLogItemListApi } from 'src/api/cacheLogItem_api';
 
 export const CacheLogUpdate = (props: {
   projectId: number;
   cacheLogId: number;
   contractorForm?: React.ReactNode;
 }) => {
-  const cacheLogStore = CacheLogStore.useStore();
+  const headStore = HeadStore.useStore();
+  const tableItemStore = TableItemStore.useStore();
 
+  // получение информации об шапке и таблице
   const infoCacheLogAction = async(cacheLogId: number, projectId: number) => {
-    cacheLogStore.info = { data: {} };
-    CacheLogStore.setStore({ ...cacheLogStore });
+    // очищаем данные в сторе
+    headStore.info = { data: {} };
+    tableItemStore.list = { data: [] };
+    HeadStore.setStore({ ...headStore });
+    TableItemStore.setStore({...tableItemStore});
     await delay();
-    cacheLogStore.info = await infoCacheLogApi(
+    // заполняем head
+    headStore.info = await infoHeadApi(
       cacheLogId,
       projectId
     );
-    CacheLogStore.setStore(cacheLogStore);
+    HeadStore.setStore(headStore);
+    // заполняем table
+    if(headStore.info) {
+      tableItemStore.list = await getCacheLogItemListApi(cacheLogId);
+      TableItemStore.setStore({...tableItemStore});
+    }
   }
 
   useEffect(() => {
     infoCacheLogAction(props.cacheLogId, props.projectId);
   }, []);
 
-  const cacheLogData: Partial<CacheLogI> = {
-    ...cacheLogStore.info.data,
+  const cacheLogData: Partial<HeadI> = {
+    ...headStore.info.data,
   };
 
   return (
     <Group description="">
-      <CacheLogAddEditForm
+      <HeadAddEditForm
         cacheLog={cacheLogData}
         isUpdate
         contractorForm={props.contractorForm}
